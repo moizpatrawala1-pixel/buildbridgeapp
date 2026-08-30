@@ -1,0 +1,349 @@
+// src/app/contractors/[slug]/page.tsx
+//
+// Shows a contractor's real profile and projects. The quote request form is
+// only rendered as an actual form when the visitor is signed in — since
+// POST /api/quote-requests requires auth, showing the form to an anonymous
+// visitor and letting them hit a 401 on submit would be a confusing dead
+// end. Signed-out visitors instead see a prompt to sign in / sign up.
+
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
+
+type Project = {
+  id: string;
+  title: string;
+  clientName: string | null;
+  projectType: string | null;
+  contractValueLakh: number | null;
+  completedYear: number | null;
+};
+
+type ContractorDetail = {
+  id: string;
+  slug: string;
+  name: string;
+  city: string;
+  area: string;
+  tradeTypes: string[];
+  verificationStatus: 'PENDING' | 'VERIFIED' | 'REJECTED';
+  yearsInBusiness: number | null;
+  teamSizeMin: number | null;
+  teamSizeMax: number | null;
+  gstRegistered: boolean;
+  insuranceCoverLakh: number | null;
+  rating: number;
+  reviewCount: number;
+  licenseNumber: string;
+  bio: string | null;
+  projects: Project[];
+};
+
+export default function ContractorProfilePage() {
+  const params = useParams<{ slug: string }>();
+  const { status } = useSession();
+
+  const [contractor, setContractor] = useState<ContractorDetail | null>(null);
+  const [notFound, setNotFound] = useState(false);
+
+  const [projectType, setProjectType] = useState('');
+  const [location, setLocation] = useState('');
+  const [budgetRangeLabel, setBudgetRangeLabel] = useState('Under ₹50 L');
+  const [details, setDetails] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [submitResult, setSubmitResult] = useState<'success' | 'error' | null>(null);
+
+  useEffect(() => {
+    if (!params.slug) return;
+    fetch(`/api/contractors/${params.slug}`)
+      .then((res) => {
+        if (res.status === 404) {
+          setNotFound(true);
+          return null;
+        }
+        if (!res.ok) throw new Error('Failed to load');
+        return res.json();
+      })
+      .then((data) => {
+        if (data) {
+          setContractor(data);
+          setProjectType(data.tradeTypes[0] ?? '');
+        }
+      })
+      .catch(() => setNotFound(true));
+  }, [params.slug]);
+
+  async function handleQuoteSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!contractor) return;
+    setSubmitting(true);
+    setSubmitResult(null);
+
+    try {
+      const res = await fetch('/api/quote-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contractorId: contractor.id,
+          projectType,
+          location,
+          budgetRangeLabel,
+          details,
+          contactPhone,
+        }),
+      });
+
+      if (res.ok) {
+        setSubmitResult('success');
+        setDetails('');
+        setLocation('');
+        setContactPhone('');
+      } else {
+        setSubmitResult('error');
+      }
+    } catch {
+      setSubmitResult('error');
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (notFound) {
+    return (
+      <>
+        <Nav />
+        <main className="flex-1 flex items-center justify-center py-24">
+          <p className="text-charcoal/60">Contractor not found.</p>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  if (!contractor) {
+    return (
+      <>
+        <Nav />
+        <main className="flex-1 flex items-center justify-center py-24">
+          <p className="text-charcoal/50 text-sm">Loading…</p>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Nav />
+
+      <header className="bg-charcoal text-paper pt-11 pb-9">
+        <div className="max-w-[1180px] mx-auto px-8">
+          <div className="flex items-start gap-5 flex-wrap justify-between">
+            <div className="flex gap-5">
+              <div className="w-[84px] h-[84px] rounded-xl bg-charcoal-soft border border-white/10 text-amber-soft font-display font-bold text-3xl flex items-center justify-center shrink-0">
+                {contractor.name.slice(0, 2).toUpperCase()}
+              </div>
+              <div>
+                <div className="flex items-center gap-3 flex-wrap mb-2">
+                  <h1 className="font-display font-bold text-[28px] tracking-tight">{contractor.name}</h1>
+                  {contractor.verificationStatus === 'VERIFIED' && (
+                    <span className="inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-wide text-verified bg-verified-soft border border-verified/25 rounded-full px-2.5 py-1">
+                      ✓ Verified
+                    </span>
+                  )}
+                </div>
+                <div className="flex gap-4 flex-wrap text-[13.5px] text-paper/60 mb-3">
+                  <span>📍 {contractor.area}, {contractor.city}</span>
+                  <span>🏗️ {contractor.tradeTypes.join(', ')}</span>
+                  {contractor.yearsInBusiness && <span>📅 {contractor.yearsInBusiness}+ years in business</span>}
+                </div>
+                {contractor.reviewCount > 0 && (
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-amber text-base tracking-wide">
+                      {'★'.repeat(Math.round(contractor.rating))}
+                      {'☆'.repeat(5 - Math.round(contractor.rating))}
+                    </span>
+                    <span className="font-mono font-semibold text-[15px]">{contractor.rating.toFixed(1)}</span>
+                    <span className="text-paper/55 text-[13.5px]">({contractor.reviewCount} reviews)</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-[1180px] mx-auto px-8 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-11 py-12">
+        <div>
+          {contractor.bio && <p className="text-[15px] text-charcoal/70 leading-relaxed mb-8">{contractor.bio}</p>}
+
+          <h2 className="font-display font-semibold text-xl mb-5">Completed Projects</h2>
+          {contractor.projects.length === 0 ? (
+            <p className="text-sm text-charcoal/50 border border-line rounded-md p-6 bg-white">
+              No projects listed yet for this contractor.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {contractor.projects.map((p) => (
+                <div key={p.id} className="border border-line rounded-md overflow-hidden bg-white">
+                  <div className="h-[100px] bg-gradient-to-br from-[#4A4E55] to-[#2A2D32]" />
+                  <div className="p-4">
+                    <h3 className="font-display font-semibold text-[15px] mb-1">{p.title}</h3>
+                    {(p.clientName || p.projectType) && (
+                      <p className="text-xs text-charcoal/50 mb-3">
+                        {[p.clientName && `Client: ${p.clientName}`, p.projectType].filter(Boolean).join(' · ')}
+                      </p>
+                    )}
+                    <div className="flex justify-between items-center pt-3 border-t border-line">
+                      {p.contractValueLakh && (
+                        <span className="font-mono font-semibold text-sm text-amber">
+                          ₹{p.contractValueLakh >= 100 ? `${(p.contractValueLakh / 100).toFixed(1)} Cr` : `${p.contractValueLakh} L`} contract value
+                        </span>
+                      )}
+                      {p.completedYear && <span className="text-xs text-charcoal/50">{p.completedYear}</span>}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div>
+          <div className="bg-white border border-line rounded-md p-6 mb-5">
+            <h4 className="font-display font-semibold text-[15.5px] mb-4">Business Details</h4>
+            <dl className="text-[13.5px]">
+              <div className="flex justify-between py-2.5 border-b border-line">
+                <dt className="text-charcoal/50">License Number</dt>
+                <dd className="font-mono text-xs font-semibold">{contractor.licenseNumber}</dd>
+              </div>
+              {(contractor.teamSizeMin || contractor.teamSizeMax) && (
+                <div className="flex justify-between py-2.5 border-b border-line">
+                  <dt className="text-charcoal/50">Team Size</dt>
+                  <dd className="font-semibold">{contractor.teamSizeMin}–{contractor.teamSizeMax} workers</dd>
+                </div>
+              )}
+              <div className="flex justify-between py-2.5 border-b border-line">
+                <dt className="text-charcoal/50">GST Registered</dt>
+                <dd className="font-semibold">{contractor.gstRegistered ? 'Yes' : 'Not disclosed'}</dd>
+              </div>
+              {contractor.insuranceCoverLakh && (
+                <div className="flex justify-between py-2.5">
+                  <dt className="text-charcoal/50">Insurance Cover</dt>
+                  <dd className="font-semibold">₹{contractor.insuranceCoverLakh} L</dd>
+                </div>
+              )}
+            </dl>
+          </div>
+
+          <div className="bg-white border border-line rounded-md p-6 sticky top-24">
+            <h4 className="font-display font-semibold text-[15.5px] mb-4">Request a Quotation</h4>
+
+            {status === 'loading' ? null : status !== 'authenticated' ? (
+              <div>
+                <p className="text-sm text-charcoal/60 mb-4">Sign in to request a quote from this contractor.</p>
+                <Link
+                  href="/signup"
+                  className="block text-center bg-amber text-white font-semibold text-sm py-3 rounded-[3px] hover:bg-[#be6520] transition-colors"
+                >
+                  Sign up to continue
+                </Link>
+              </div>
+            ) : submitResult === 'success' ? (
+              <div className="text-sm">
+                <p className="text-verified font-medium mb-1">Request sent.</p>
+                <p className="text-charcoal/60">
+                  {contractor.name} will be notified and can reach out to discuss your project.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleQuoteSubmit} className="flex flex-col gap-3.5">
+                <div>
+                  <label className="block text-xs font-semibold text-charcoal/60 mb-1.5">Project type</label>
+                  <select
+                    value={projectType}
+                    onChange={(e) => setProjectType(e.target.value)}
+                    className="w-full px-3 py-2.5 border border-line rounded-[4px] text-[13.5px] bg-paper"
+                  >
+                    {contractor.tradeTypes.map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-charcoal/60 mb-1.5">Location</label>
+                  <input
+                    type="text"
+                    required
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="Area, City"
+                    className="w-full px-3 py-2.5 border border-line rounded-[4px] text-[13.5px] bg-paper"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-charcoal/60 mb-1.5">Estimated budget</label>
+                  <select
+                    value={budgetRangeLabel}
+                    onChange={(e) => setBudgetRangeLabel(e.target.value)}
+                    className="w-full px-3 py-2.5 border border-line rounded-[4px] text-[13.5px] bg-paper"
+                  >
+                    <option>Under ₹50 L</option>
+                    <option>₹50 L – ₹1 Cr</option>
+                    <option>₹1 Cr – ₹3 Cr</option>
+                    <option>₹3 Cr+</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-charcoal/60 mb-1.5">Project details</label>
+                  <textarea
+                    required
+                    value={details}
+                    onChange={(e) => setDetails(e.target.value)}
+                    placeholder="Timeline, scope..."
+                    rows={3}
+                    className="w-full px-3 py-2.5 border border-line rounded-[4px] text-[13.5px] bg-paper resize-y"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-charcoal/60 mb-1.5">Phone number</label>
+                  <input
+                    type="tel"
+                    required
+                    value={contactPhone}
+                    onChange={(e) => setContactPhone(e.target.value)}
+                    placeholder="+91 00000 00000"
+                    className="w-full px-3 py-2.5 border border-line rounded-[4px] text-[13.5px] bg-paper"
+                  />
+                </div>
+
+                {submitResult === 'error' && (
+                  <p className="text-sm text-red-600">Something went wrong. Please try again.</p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="mt-1 bg-amber text-white font-semibold text-sm py-3 rounded-[3px] hover:bg-[#be6520] transition-colors disabled:opacity-60"
+                >
+                  {submitting ? 'Sending…' : 'Send Request'}
+                </button>
+                <p className="text-[11.5px] text-charcoal/50 leading-relaxed">
+                  {contractor.name} will be notified and can reach out directly to discuss.
+                </p>
+              </form>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <Footer />
+    </>
+  );
+}

@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+:root {
+  --charcoal: #1c1e22;
+  --charcoal-soft: #24272c;
+  --steel: #3a3f47;
+  --paper: #f6f4ef;
+  --paper-dim: #ebe8e0;
+  --line: #dad6cc;
+  --line-dark: #3a3f47;
+  --amber: #d4732a;
+  --amber-soft: #e8935a;
+  --verified: #3d5a40;
+  --verified-soft: #e8eee9;
+}
+
+@theme inline {
+  --color-charcoal: var(--charcoal);
+  --color-charcoal-soft: var(--charcoal-soft);
+  --color-steel: var(--steel);
+  --color-paper: var(--paper);
+  --color-paper-dim: var(--paper-dim);
+  --color-line: var(--line);
+  --color-amber: var(--amber);
+  --color-amber-soft: var(--amber-soft);
+  --color-verified: var(--verified);
+  --color-verified-soft: var(--verified-soft);
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--charcoal);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
