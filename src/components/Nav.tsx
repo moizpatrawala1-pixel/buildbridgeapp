@@ -20,7 +20,7 @@ export default function Nav() {
           <span className="w-[30px] h-[30px] border-[1.5px] border-amber rounded-full flex items-center justify-center relative shrink-0">
             <span className="w-2.5 h-2.5 bg-amber rotate-45 block" />
           </span>
-          BuildBridge
+          (Kalm)
         </Link>
 
         <div className="hidden md:flex items-center gap-10">

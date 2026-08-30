@@ -12,7 +12,7 @@ export default function Footer() {
               <span className="w-[30px] h-[30px] border-[1.5px] border-amber rounded-full flex items-center justify-center shrink-0">
                 <span className="w-2.5 h-2.5 bg-amber rotate-45 block" />
               </span>
-              BuildBridge
+              (Kalm)
             </div>
             <p className="text-sm leading-relaxed max-w-[260px]">
               Connecting developers, licensed contractors, and material suppliers on one verified network.
@@ -41,7 +41,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 pt-7 text-[13px]">
-          <span>© {new Date().getFullYear()} BuildBridge. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} (Kalm). All rights reserved.</span>
           <span>Mumbai, India</span>
         </div>
       </div>

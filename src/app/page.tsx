@@ -30,11 +30,12 @@ export default function Home() {
             <span className="w-5 h-[1.5px] bg-amber-soft" />
             Licensed &amp; Verified Network
           </div>
+<p className="font-mono text-sm text-amber-soft tracking-wide mb-4">Kaam. Connected.</p>
           <h1 className="font-display font-bold text-[clamp(38px,4.6vw,60px)] leading-[1.05] tracking-tight mb-5 max-w-2xl">
             Build with contractors who&apos;ve <span className="text-amber-soft">proven</span> it before.
           </h1>
           <p className="text-[17px] leading-relaxed text-paper/68 max-w-[480px] mb-9">
-            BuildBridge connects developers with licensed contractors — every profile backed by
+            (Kalm) connects developers with licensed contractors — every profile backed by
             verified project history, not just claims.
           </p>
           <div className="flex gap-3.5 flex-wrap">

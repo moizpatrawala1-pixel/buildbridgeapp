@@ -44,7 +44,7 @@ export async function sendQuoteRequestEmail(input: QuoteRequestEmailInput): Prom
       // the email address you signed up with. Once you verify your own
       // domain in Resend's dashboard, swap this to something like
       // "BuildBridge <quotes@yourdomain.com>" — see the deployment notes.
-      from: 'BuildBridge <onboarding@resend.dev>',
+      from: '(Kalm) <onboarding@resend.dev>',
       to: notifyAddress,
       subject: `New quote request for ${input.contractorName}`,
       html: `
