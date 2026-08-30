@@ -8,7 +8,12 @@
 
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResendClient() {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY is not set');
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 type QuoteRequestEmailInput = {
   contractorName: string;
@@ -34,7 +39,7 @@ export async function sendQuoteRequestEmail(input: QuoteRequestEmailInput): Prom
   }
 
   try {
-    const { error } = await resend.emails.send({
+    const { error } = await getResendClient().emails.send({
       // Resend's test domain works without any DNS setup, but only sends to
       // the email address you signed up with. Once you verify your own
       // domain in Resend's dashboard, swap this to something like
