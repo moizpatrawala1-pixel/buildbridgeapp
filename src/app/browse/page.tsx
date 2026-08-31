@@ -35,8 +35,12 @@ type Contractor = {
 };
 
 function BrowsePageInner() {
+  const searchParams = useSearchParams();
   const [contractors, setContractors] = useState<Contractor[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // Pre-select the trade filter from ?trade=X in the URL (used by the
+  // landing page's trade-category links) — falls back to 'all' if absent
+  // or if it doesn't match any real trade once contractors load.
   const [selectedTrade, setSelectedTrade] = useState<string>(searchParams.get('trade') ?? 'all');
 
   useEffect(() => {
