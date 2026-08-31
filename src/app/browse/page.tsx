@@ -13,7 +13,7 @@
 
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Nav from '@/components/Nav';
@@ -34,8 +34,7 @@ type Contractor = {
   _count: { projects: number };
 };
 
-export default function BrowsePage() {
-  const searchParams = useSearchParams();
+function BrowsePageInner() {
   const [contractors, setContractors] = useState<Contractor[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedTrade, setSelectedTrade] = useState<string>(searchParams.get('trade') ?? 'all');
@@ -189,5 +188,13 @@ export default function BrowsePage() {
 
       <Footer />
     </>
+  );
+}
+
+export default function BrowsePage() {
+  return (
+    <Suspense fallback={null}>
+      <BrowsePageInner />
+    </Suspense>
   );
 }
