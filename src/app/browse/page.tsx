@@ -5,10 +5,15 @@
 // it shows the real count, including when that's zero or one. A new
 // platform with 3 contractors looking like it has hundreds isn't a good
 // look when someone actually clicks into it and sees otherwise.
+//
+// Trade filter options are derived from the actual fetched contractors,
+// not a hardcoded list — this guarantees every option shown has at least
+// one real result, and the list never needs manual updating as new trades
+// get added via the admin page.
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
@@ -31,6 +36,7 @@ type Contractor = {
 export default function BrowsePage() {
   const [contractors, setContractors] = useState<Contractor[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [selectedTrade, setSelectedTrade] = useState<string>('all');
 
   useEffect(() => {
     fetch('/api/contractors')
@@ -41,6 +47,18 @@ export default function BrowsePage() {
       .then(setContractors)
       .catch(() => setError('Could not load contractors right now. Please try again shortly.'));
   }, []);
+
+  const availableTrades = useMemo(() => {
+    if (!contractors) return [];
+    const allTrades = contractors.flatMap((c) => c.tradeTypes);
+    return Array.from(new Set(allTrades)).sort();
+  }, [contractors]);
+
+  const filteredContractors = useMemo(() => {
+    if (!contractors) return null;
+    if (selectedTrade === 'all') return contractors;
+    return contractors.filter((c) => c.tradeTypes.includes(selectedTrade));
+  }, [contractors, selectedTrade]);
 
   return (
     <>
@@ -65,24 +83,56 @@ export default function BrowsePage() {
           <p className="text-charcoal/50 text-sm">Loading contractors…</p>
         )}
 
-        {contractors !== null && (
+        {contractors !== null && filteredContractors !== null && (
           <>
+            {availableTrades.length > 1 && (
+              <div className="flex flex-wrap gap-2 mb-6">
+                <button
+                  onClick={() => setSelectedTrade('all')}
+                  className={`text-[13px] font-medium px-3.5 py-2 rounded-full border transition-colors ${
+                    selectedTrade === 'all'
+                      ? 'bg-charcoal text-paper border-charcoal'
+                      : 'bg-white text-charcoal/70 border-line hover:border-charcoal'
+                  }`}
+                >
+                  All trades
+                </button>
+                {availableTrades.map((trade) => (
+                  <button
+                    key={trade}
+                    onClick={() => setSelectedTrade(trade)}
+                    className={`text-[13px] font-medium px-3.5 py-2 rounded-full border transition-colors ${
+                      selectedTrade === trade
+                        ? 'bg-charcoal text-paper border-charcoal'
+                        : 'bg-white text-charcoal/70 border-line hover:border-charcoal'
+                    }`}
+                  >
+                    {trade}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <p className="text-sm text-charcoal/60 mb-6">
-              {contractors.length === 0
-                ? 'No verified contractors yet.'
-                : `${contractors.length} verified contractor${contractors.length === 1 ? '' : 's'}`}
+              {filteredContractors.length === 0
+                ? selectedTrade === 'all'
+                  ? 'No verified contractors yet.'
+                  : `No verified contractors for "${selectedTrade}" yet.`
+                : `${filteredContractors.length} verified contractor${filteredContractors.length === 1 ? '' : 's'}`}
             </p>
 
-            {contractors.length === 0 ? (
+            {filteredContractors.length === 0 ? (
               <div className="border border-line rounded-md p-10 text-center bg-white">
                 <p className="text-charcoal/70 font-medium mb-1">No contractors listed yet</p>
                 <p className="text-sm text-charcoal/50">
-                  Check back soon — new contractors are added and verified regularly.
+                  {selectedTrade === 'all'
+                    ? 'Check back soon — new contractors are added and verified regularly.'
+                    : 'Try a different trade, or check back soon as more contractors are added.'}
                 </p>
               </div>
             ) : (
               <div className="flex flex-col gap-4">
-                {contractors.map((c) => (
+                {filteredContractors.map((c) => (
                   <Link
                     key={c.id}
                     href={`/contractors/${c.slug}`}
