@@ -14,6 +14,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
@@ -34,9 +35,10 @@ type Contractor = {
 };
 
 export default function BrowsePage() {
+  const searchParams = useSearchParams();
   const [contractors, setContractors] = useState<Contractor[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [selectedTrade, setSelectedTrade] = useState<string>('all');
+  const [selectedTrade, setSelectedTrade] = useState<string>(searchParams.get('trade') ?? 'all');
 
   useEffect(() => {
     fetch('/api/contractors')

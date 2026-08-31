@@ -6,10 +6,23 @@
 // visitors a lie about how many contractors are actually on the platform.
 // Once there's real contractor and quote-request data, a live stats section
 // can come back — pulling from an actual COUNT query, not hardcoded text.
+//
+// Trade category tiles link to /browse?trade=X, which the browse page reads
+// on load to pre-select that filter — so this section is a real shortcut
+// into the filter we built, not decorative text repeating it.
 
 import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+
+const TRADE_CATEGORIES = [
+  { name: 'RCC & Structural', icon: '🏗️' },
+  { name: 'Electrical', icon: '⚡' },
+  { name: 'Waterproofing', icon: '💧' },
+  { name: 'Interior Fit-out', icon: '🛋️' },
+  { name: 'Plumbing', icon: '🔧' },
+  { name: 'Facade & Cladding', icon: '🧱' },
+];
 
 export default function Home() {
   return (
@@ -30,7 +43,7 @@ export default function Home() {
             <span className="w-5 h-[1.5px] bg-amber-soft" />
             Licensed &amp; Verified Network
           </div>
-<p className="font-mono text-sm text-amber-soft tracking-wide mb-4">Kaam. Connected.</p>
+          <p className="font-mono text-sm text-amber-soft tracking-wide mb-4">Kaam. Connected.</p>
           <h1 className="font-display font-bold text-[clamp(38px,4.6vw,60px)] leading-[1.05] tracking-tight mb-5 max-w-2xl">
             Build with contractors who&apos;ve <span className="text-amber-soft">proven</span> it before.
           </h1>
@@ -55,6 +68,7 @@ export default function Home() {
         </div>
       </header>
 
+      {/* HOW IT WORKS */}
       <section className="py-20">
         <div className="max-w-[1180px] mx-auto px-8">
           <div className="text-center max-w-[620px] mx-auto mb-14">
@@ -91,7 +105,74 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-20 bg-charcoal text-paper text-center relative overflow-hidden">
+      {/* TRADE CATEGORIES — real links into the browse filter, not decoration */}
+      <section className="py-20 bg-paper-dim">
+        <div className="max-w-[1180px] mx-auto px-8">
+          <div className="text-center max-w-[620px] mx-auto mb-14">
+            <div className="font-mono text-xs font-medium tracking-widest uppercase text-amber flex items-center justify-center gap-2.5 mb-4">
+              <span className="w-5 h-[1.5px] bg-amber" />
+              What We Cover
+              <span className="w-5 h-[1.5px] bg-amber" />
+            </div>
+            <h2 className="font-display font-bold text-[clamp(30px,3.6vw,42px)] leading-tight tracking-tight mb-4">
+              Every trade, one directory.
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {TRADE_CATEGORIES.map((trade) => (
+              <Link
+                key={trade.name}
+                href={`/browse?trade=${encodeURIComponent(trade.name)}`}
+                className="flex items-center gap-4 bg-white border border-line rounded-md p-5 hover:border-charcoal transition-colors"
+              >
+                <span className="text-2xl">{trade.icon}</span>
+                <span className="font-display font-semibold text-[15px]">{trade.name}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* VERIFICATION STANDARD */}
+      <section className="py-20">
+        <div className="max-w-[1180px] mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
+          <div>
+            <div className="font-mono text-xs font-medium tracking-widest uppercase text-amber flex items-center gap-2.5 mb-4">
+              <span className="w-5 h-[1.5px] bg-amber" />
+              What &quot;Verified&quot; Actually Means
+            </div>
+            <h2 className="font-display font-bold text-[clamp(28px,3.2vw,36px)] leading-tight tracking-tight mb-5">
+              A badge that means something, not just a color.
+            </h2>
+            <p className="text-[15.5px] leading-relaxed text-charcoal/65 mb-4">
+              Every Verified contractor&apos;s license has been independently checked against the
+              issuing state authority — not just submitted and taken at their word.
+            </p>
+            <p className="text-[15.5px] leading-relaxed text-charcoal/65">
+              If we haven&apos;t been able to confirm a license yet, a contractor stays marked
+              Pending. We&apos;d rather show fewer Verified profiles than let the badge stop
+              meaning what it says.
+            </p>
+          </div>
+          <div className="bg-verified-soft border border-verified/20 rounded-lg p-8">
+            <div className="w-14 h-14 rounded-full border-2 border-verified flex items-center justify-center mb-5 bg-white">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#3D5A40" strokeWidth="3" className="w-6 h-6">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <h4 className="font-display font-semibold text-lg mb-2 text-verified">Verified means:</h4>
+            <ul className="flex flex-col gap-2.5 text-[14.5px] text-charcoal/70">
+              <li>✓ License number checked against the state registry</li>
+              <li>✓ Contact details confirmed directly with the contractor</li>
+              <li>✓ Never marked Verified from self-submitted documents alone</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* CLOSING CTA */}
+      <section className="py-24 bg-charcoal text-paper text-center relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-[0.04] pointer-events-none"
           style={{
@@ -101,18 +182,27 @@ export default function Home() {
           }}
         />
         <div className="max-w-[620px] mx-auto px-8 relative z-10">
-          <h2 className="font-display font-bold text-[clamp(30px,3.6vw,42px)] mb-4">
-            Find your next contractor.
+          <h2 className="font-display font-bold text-[clamp(32px,3.8vw,44px)] mb-4 leading-tight">
+            Your next contractor is one search away.
           </h2>
           <p className="text-paper/60 text-[15.5px] mb-9">
-            Browse licensed contractors with verified project history.
+            Browse licensed contractors with verified project history, or list your own business
+            to get discovered.
           </p>
-          <Link
-            href="/browse"
-            className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] bg-amber text-white hover:bg-[#be6520] transition-colors"
-          >
-            Browse Contractors
-          </Link>
+          <div className="flex gap-3.5 flex-wrap justify-center">
+            <Link
+              href="/browse"
+              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] bg-amber text-white hover:bg-[#be6520] transition-colors"
+            >
+              Browse Contractors
+            </Link>
+            <Link
+              href="/admin"
+              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] border-[1.5px] border-line-dark text-paper hover:border-amber hover:text-amber transition-colors"
+            >
+              List Your Business
+            </Link>
+          </div>
         </div>
       </section>
 
