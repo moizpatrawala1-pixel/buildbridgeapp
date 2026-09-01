@@ -19,6 +19,7 @@ const projectSchema = z.object({
   projectType: z.string().trim().max(200).optional(),
   contractValueLakh: z.number().int().positive().optional(),
   completedYear: z.number().int().min(1990).max(2100).optional(),
+  imageUrls: z.array(z.string().url()).max(10).default([]),
 });
 
 const contractorSchema = z.object({
@@ -35,7 +36,8 @@ const contractorSchema = z.object({
   insuranceCoverLakh: z.number().int().positive().optional(),
   phone: z.string().trim().min(6).max(20),
   email: z.string().trim().email().optional().or(z.literal('')),
-  bio: z.string().trim().max(2000).optional(),
+   bio: z.string().trim().max(2000).optional(),
+  logoUrl: z.string().url().optional(),
   projects: z.array(projectSchema).default([]),
 });
 
@@ -110,7 +112,8 @@ export async function POST(req: NextRequest) {
       insuranceCoverLakh: data.insuranceCoverLakh,
       phone: data.phone,
       email: data.email || undefined,
-      bio: data.bio,
+           bio: data.bio,
+      logoUrl: data.logoUrl,
       projects: {
         create: data.projects.map((p) => ({
           title: p.title,
@@ -118,6 +121,7 @@ export async function POST(req: NextRequest) {
           projectType: p.projectType,
           contractValueLakh: p.contractValueLakh,
           completedYear: p.completedYear,
+          imageUrls: p.imageUrls,
         })),
       },
     },

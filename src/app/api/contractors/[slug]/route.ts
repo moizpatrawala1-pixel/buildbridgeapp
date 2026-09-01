@@ -19,10 +19,11 @@ export async function GET(
 
   const contractor = await prisma.contractor.findUnique({
     where: { slug },
-    select: {
+        select: {
       id: true,
       slug: true,
       name: true,
+      logoUrl: true,
       city: true,
       area: true,
       tradeTypes: true,
@@ -42,8 +43,9 @@ export async function GET(
           title: true,
           clientName: true,
           projectType: true,
-          contractValueLakh: true,
+                    contractValueLakh: true,
           completedYear: true,
+          imageUrls: true,
         },
         orderBy: { completedYear: 'desc' },
       },

@@ -42,6 +42,13 @@ model Contractor {
   name   String
   slug   String @unique // used in profile URLs — e.g. /contractors/kunal-raut-constructions
 
+  // Logo shown on browse cards and the profile header. Stored as a full
+  // URL pointing at Vercel Blob storage — nothing about images lives in
+  // this database except the URL itself. Optional: a contractor with no
+  // logo yet falls back to their initials, same as before this feature
+  // existed — never block anything on a logo being present.
+  logoUrl String?
+
   // Location
   city   String
   area   String // e.g. "Thane", "Andheri West" — the neighborhood-level filter
@@ -106,14 +113,19 @@ model Project {
   title            String
   clientName       String? // e.g. "Vasudha Group" — omit if client asked not to be named
   projectType      String? // e.g. "Residential, 18 floors"
-  contractValueLakh Int?   // contract value in ₹ lakh
+    contractValueLakh Int?   // contract value in ₹ lakh
   completedYear    Int?
+
+  // Photos of the completed project — stored as an array of Vercel Blob
+  // URLs, in the order they should be displayed. A project can have zero
+  // photos (the profile page falls back to the existing placeholder
+  // gradient block) or several.
+  imageUrls String[] @default([])
 
   createdAt DateTime @default(now())
 
   @@index([contractorId])
 }
-
 // ---------------------------------------------------------------------------
 // Developer
 // ---------------------------------------------------------------------------

@@ -28,10 +28,11 @@ export async function GET(req: NextRequest) {
       ...(area ? { area: { equals: area, mode: 'insensitive' } } : {}),
       ...(trade ? { tradeTypes: { has: trade } } : {}),
     },
-    select: {
+        select: {
       id: true,
       slug: true,
       name: true,
+      logoUrl: true,
       city: true,
       area: true,
       tradeTypes: true,

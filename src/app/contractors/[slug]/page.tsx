@@ -22,12 +22,14 @@ type Project = {
   projectType: string | null;
   contractValueLakh: number | null;
   completedYear: number | null;
+  imageUrls: string[];
 };
 
 type ContractorDetail = {
   id: string;
   slug: string;
   name: string;
+  logoUrl: string | null;
   city: string;
   area: string;
   tradeTypes: string[];
@@ -146,8 +148,13 @@ export default function ContractorProfilePage() {
         <div className="max-w-[1180px] mx-auto px-8">
           <div className="flex items-start gap-5 flex-wrap justify-between">
             <div className="flex gap-5">
-              <div className="w-[84px] h-[84px] rounded-xl bg-charcoal-soft border border-white/10 text-amber-soft font-display font-bold text-3xl flex items-center justify-center shrink-0">
-                {contractor.name.slice(0, 2).toUpperCase()}
+                          <div className="w-[84px] h-[84px] rounded-xl bg-charcoal-soft border border-white/10 text-amber-soft font-display font-bold text-3xl flex items-center justify-center shrink-0 overflow-hidden">
+                {contractor.logoUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- external Blob URL
+                  <img src={contractor.logoUrl} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  contractor.name.slice(0, 2).toUpperCase()
+                )}
               </div>
               <div>
                 <div className="flex items-center gap-3 flex-wrap mb-2">
@@ -192,7 +199,12 @@ export default function ContractorProfilePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {contractor.projects.map((p) => (
                 <div key={p.id} className="border border-line rounded-md overflow-hidden bg-white">
-                  <div className="h-[100px] bg-gradient-to-br from-[#4A4E55] to-[#2A2D32]" />
+                                    {p.imageUrls.length > 0 ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- external Blob URL
+                    <img src={p.imageUrls[0]} alt="" className="h-[100px] w-full object-cover" />
+                  ) : (
+                    <div className="h-[100px] bg-gradient-to-br from-[#4A4E55] to-[#2A2D32]" />
+                  )}
                   <div className="p-4">
                     <h3 className="font-display font-semibold text-[15px] mb-1">{p.title}</h3>
                     {(p.clientName || p.projectType) && (

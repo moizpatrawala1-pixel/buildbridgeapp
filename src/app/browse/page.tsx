@@ -23,6 +23,7 @@ type Contractor = {
   id: string;
   slug: string;
   name: string;
+  logoUrl: string | null;
   city: string;
   area: string;
   tradeTypes: string[];
@@ -144,8 +145,13 @@ function BrowsePageInner() {
                     className="block bg-white border border-line rounded-md p-6 hover:border-charcoal transition-colors"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-14 h-14 rounded-lg bg-charcoal text-amber-soft font-display font-bold text-lg flex items-center justify-center shrink-0">
-                        {c.name.slice(0, 2).toUpperCase()}
+                      <div className="w-14 h-14 rounded-lg bg-charcoal text-amber-soft font-display font-bold text-lg flex items-center justify-center shrink-0 overflow-hidden">
+                        {c.logoUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element -- external Blob URL
+                          <img src={c.logoUrl} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          c.name.slice(0, 2).toUpperCase()
+                        )}
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2.5 flex-wrap mb-1">

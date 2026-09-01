@@ -8,11 +8,16 @@
 // verificationStatus defaults to PENDING, not VERIFIED — see the comment on
 // the schema's VerificationStatus enum. Only flip it to VERIFIED here once
 // you've actually confirmed the license number.
+//
+// Logo and project photo uploads happen immediately on file selection (see
+// ImageUpload's own comment) — by the time this form is submitted, every
+// image is already a real URL sitting in the payload, not a raw file.
 
 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
+import ImageUpload from '@/components/ImageUpload';
 
 type ProjectDraft = {
   title: string;
@@ -20,6 +25,7 @@ type ProjectDraft = {
   projectType: string;
   contractValueLakh: string;
   completedYear: string;
+  imageUrls: string[];
 };
 
 const emptyProject = (): ProjectDraft => ({
@@ -28,6 +34,7 @@ const emptyProject = (): ProjectDraft => ({
   projectType: '',
   contractValueLakh: '',
   completedYear: '',
+  imageUrls: [],
 });
 
 export default function NewContractorPage() {
@@ -45,6 +52,7 @@ export default function NewContractorPage() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [bio, setBio] = useState('');
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [projects, setProjects] = useState<ProjectDraft[]>([]);
 
   const [error, setError] = useState<string | null>(null);
@@ -55,8 +63,18 @@ export default function NewContractorPage() {
     setProjects((p) => [...p, emptyProject()]);
   }
 
-  function updateProject(index: number, field: keyof ProjectDraft, value: string) {
+  function updateProject(index: number, field: keyof Omit<ProjectDraft, 'imageUrls'>, value: string) {
     setProjects((p) => p.map((proj, i) => (i === index ? { ...proj, [field]: value } : proj)));
+  }
+
+  function addProjectImage(index: number, url: string) {
+    setProjects((p) => p.map((proj, i) => (i === index ? { ...proj, imageUrls: [...proj.imageUrls, url] } : proj)));
+  }
+
+  function removeProjectImage(index: number, url: string) {
+    setProjects((p) =>
+      p.map((proj, i) => (i === index ? { ...proj, imageUrls: proj.imageUrls.filter((u) => u !== url) } : proj))
+    );
   }
 
   function removeProject(index: number) {
@@ -84,6 +102,7 @@ export default function NewContractorPage() {
       phone,
       email: email || undefined,
       bio: bio || undefined,
+      logoUrl: logoUrl || undefined,
       projects: projects
         .filter((p) => p.title.trim())
         .map((p) => ({
@@ -92,6 +111,7 @@ export default function NewContractorPage() {
           projectType: p.projectType || undefined,
           contractValueLakh: p.contractValueLakh ? Number(p.contractValueLakh) : undefined,
           completedYear: p.completedYear ? Number(p.completedYear) : undefined,
+          imageUrls: p.imageUrls,
         })),
     };
 
@@ -115,7 +135,6 @@ export default function NewContractorPage() {
       }
 
       setSuccess(`Added ${data.name}. You can add another below.`);
-      // Reset the form for the next contractor.
       setName('');
       setArea('');
       setTradeTypesInput('');
@@ -129,6 +148,7 @@ export default function NewContractorPage() {
       setPhone('');
       setEmail('');
       setBio('');
+      setLogoUrl(null);
       setProjects([]);
     } catch {
       setError('Something went wrong. Please try again.');
@@ -165,6 +185,8 @@ export default function NewContractorPage() {
           <Field label="Business name">
             <input required value={name} onChange={(e) => setName(e.target.value)} className={inputCls} />
           </Field>
+
+          <ImageUpload label="Logo (optional)" value={logoUrl} onChange={setLogoUrl} />
 
           <div className="grid grid-cols-2 gap-4">
             <Field label="City">
@@ -263,7 +285,7 @@ export default function NewContractorPage() {
                       Remove
                     </button>
                   </div>
-                  <div className="grid grid-cols-2 gap-2.5">
+                  <div className="grid grid-cols-2 gap-2.5 mb-3">
                     <input
                       value={p.clientName}
                       onChange={(e) => updateProject(i, 'clientName', e.target.value)}
@@ -290,6 +312,30 @@ export default function NewContractorPage() {
                       placeholder="Year completed"
                       className={inputCls}
                     />
+                  </div>
+
+                  <div className="flex flex-wrap gap-3 items-end">
+                    {p.imageUrls.map((url) => (
+                      <div key={url} className="relative">
+                        {/* eslint-disable-next-line @next/next/no-img-element -- external Blob URL */}
+                        <img src={url} alt="" className="w-16 h-16 rounded-md object-cover border border-line" />
+                        <button
+                          type="button"
+                          onClick={() => removeProjectImage(i, url)}
+                          className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-red-600 text-white text-xs leading-5 text-center"
+                          aria-label="Remove photo"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                    <div className="w-40">
+                      <ImageUpload
+                        label={p.imageUrls.length === 0 ? 'Add photo' : 'Add another'}
+                        value={null}
+                        onChange={(url) => url && addProjectImage(i, url)}
+                      />
+                    </div>
                   </div>
                 </div>
               ))}
