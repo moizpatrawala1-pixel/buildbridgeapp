@@ -204,7 +204,7 @@ export default function ContractorProfilePage() {
                 <div
                   key={p.id}
                   className="border border-line rounded-md overflow-hidden bg-white cursor-pointer hover:border-amber transition-colors"
-                                   onClick={() => { console.log('Project clicked:', p.title); setOpenProject(p); }}
+                  onClick={() => setOpenProject(p)}
                 >
                   <ProjectGallery imageUrls={p.imageUrls} />
                   <div className="p-4">
