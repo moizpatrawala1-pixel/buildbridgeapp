@@ -15,6 +15,7 @@ import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import ProjectGallery from '@/components/ProjectGallery';
+import ProjectLightbox from '@/components/ProjectLightbox';
 
 type Project = {
   id: string;
@@ -53,6 +54,7 @@ export default function ContractorProfilePage() {
 
   const [contractor, setContractor] = useState<ContractorDetail | null>(null);
   const [notFound, setNotFound] = useState(false);
+  const [openProject, setOpenProject] = useState<Project | null>(null);
 
   const [projectType, setProjectType] = useState('');
   const [location, setLocation] = useState('');
@@ -199,7 +201,11 @@ export default function ContractorProfilePage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {contractor.projects.map((p) => (
-                <div key={p.id} className="border border-line rounded-md overflow-hidden bg-white">
+                <div
+                  key={p.id}
+                  className="border border-line rounded-md overflow-hidden bg-white cursor-pointer hover:border-amber transition-colors"
+                  onClick={() => setOpenProject(p)}
+                >
                   <ProjectGallery imageUrls={p.imageUrls} />
                   <div className="p-4">
                     <h3 className="font-display font-semibold text-[15px] mb-1">{p.title}</h3>
@@ -352,6 +358,10 @@ export default function ContractorProfilePage() {
       </div>
 
       <Footer />
+
+      {openProject && (
+        <ProjectLightbox project={openProject} onClose={() => setOpenProject(null)} />
+      )}
     </>
   );
 }
