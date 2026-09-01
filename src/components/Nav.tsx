@@ -15,7 +15,7 @@ export default function Nav() {
 
   return (
     <nav className="sticky top-0 z-50 bg-charcoal/97 backdrop-blur-sm border-b border-white/10">
-      <div className="max-w-[1180px] mx-auto px-8 h-[72px] flex items-center justify-between">
+      <div className="max-w-[1440px] mx-auto px-8 h-[72px] flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 font-display font-bold text-xl text-paper tracking-tight">
           <span className="w-[30px] h-[30px] border-[1.5px] border-amber rounded-full flex items-center justify-center relative shrink-0">
             <span className="w-2.5 h-2.5 bg-amber rotate-45 block" />

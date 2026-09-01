@@ -71,14 +71,14 @@ function BrowsePageInner() {
       <Nav />
 
       <header className="bg-charcoal text-paper pt-11 pb-10">
-        <div className="max-w-[1180px] mx-auto px-8">
+        <div className="max-w-[1440px] mx-auto px-8">
           <h1 className="font-display font-bold text-[clamp(28px,3.6vw,38px)] tracking-tight">
             Find your contractor
           </h1>
         </div>
       </header>
 
-      <main className="flex-1 max-w-[1180px] mx-auto px-8 py-10 w-full">
+      <main className="flex-1 max-w-[1440px] mx-auto px-8 py-10 w-full">
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md p-4 mb-6">
             {error}

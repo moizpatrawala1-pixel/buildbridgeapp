@@ -38,7 +38,7 @@ export default function Home() {
             backgroundSize: '48px 48px',
           }}
         />
-        <div className="max-w-[1180px] mx-auto px-8 relative z-10">
+        <div className="max-w-[1440px] mx-auto px-8 relative z-10">
           <div className="font-mono text-xs font-medium tracking-widest uppercase text-amber-soft flex items-center gap-2.5 mb-5">
             <span className="w-5 h-[1.5px] bg-amber-soft" />
             Licensed &amp; Verified Network
@@ -70,7 +70,7 @@ export default function Home() {
 
       {/* HOW IT WORKS */}
       <section className="py-20">
-        <div className="max-w-[1180px] mx-auto px-8">
+        <div className="max-w-[1440px] mx-auto px-8">
           <div className="text-center max-w-[620px] mx-auto mb-14">
             <div className="font-mono text-xs font-medium tracking-widest uppercase text-amber flex items-center justify-center gap-2.5 mb-4">
               <span className="w-5 h-[1.5px] bg-amber" />
@@ -107,7 +107,7 @@ export default function Home() {
 
       {/* TRADE CATEGORIES — real links into the browse filter, not decoration */}
       <section className="py-20 bg-paper-dim">
-        <div className="max-w-[1180px] mx-auto px-8">
+        <div className="max-w-[1440px] mx-auto px-8">
           <div className="text-center max-w-[620px] mx-auto mb-14">
             <div className="font-mono text-xs font-medium tracking-widest uppercase text-amber flex items-center justify-center gap-2.5 mb-4">
               <span className="w-5 h-[1.5px] bg-amber" />
@@ -136,7 +136,7 @@ export default function Home() {
 
       {/* VERIFICATION STANDARD */}
       <section className="py-20">
-        <div className="max-w-[1180px] mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
+        <div className="max-w-[1440px] mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
           <div>
             <div className="font-mono text-xs font-medium tracking-widest uppercase text-amber flex items-center gap-2.5 mb-4">
               <span className="w-5 h-[1.5px] bg-amber" />
