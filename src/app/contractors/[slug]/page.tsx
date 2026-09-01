@@ -14,6 +14,7 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import ProjectGallery from '@/components/ProjectGallery';
 
 type Project = {
   id: string;
@@ -199,12 +200,7 @@ export default function ContractorProfilePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {contractor.projects.map((p) => (
                 <div key={p.id} className="border border-line rounded-md overflow-hidden bg-white">
-                                    {p.imageUrls.length > 0 ? (
-                    // eslint-disable-next-line @next/next/no-img-element -- external Blob URL
-                    <img src={p.imageUrls[0]} alt="" className="h-[100px] w-full object-cover" />
-                  ) : (
-                    <div className="h-[100px] bg-gradient-to-br from-[#4A4E55] to-[#2A2D32]" />
-                  )}
+                  <ProjectGallery imageUrls={p.imageUrls} />
                   <div className="p-4">
                     <h3 className="font-display font-semibold text-[15px] mb-1">{p.title}</h3>
                     {(p.clientName || p.projectType) && (
