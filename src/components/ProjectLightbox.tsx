@@ -1,9 +1,9 @@
 // src/components/ProjectLightbox.tsx
 //
 // Full-screen overlay for browsing one project's photos at full size, with
-// the project's details (title, client, type, value, year) shown alongside.
-// Opened by clicking a project card on the contractor profile page — see
-// that page's `openProject` state.
+// the project's details (title, developer, type, size, year) shown
+// alongside. Opened by clicking a project card on the contractor profile
+// page — see that page's `openProject` state.
 //
 // Keyboard: Escape closes, ←/→ navigate between photos. Click the
 // backdrop (outside the image/panel) to close, same as most lightboxes.
@@ -15,10 +15,13 @@ import { useEffect, useState } from 'react';
 type ProjectLightboxProps = {
   project: {
     title: string;
-    clientName: string | null;
+    developerName: string | null;
     projectType: string | null;
-    contractValueLakh: number | null;
     completedYear: number | null;
+    squareFeet: number | null;
+    elevationFloors: number | null;
+    committedDurationMonths: number | null;
+    actualDurationMonths: number | null;
     imageUrls: string[];
   };
   onClose: () => void;
@@ -131,21 +134,21 @@ export default function ProjectLightbox({ project, onClose }: ProjectLightboxPro
         )}
 
         <h2 className="font-display font-semibold text-white text-lg">{project.title}</h2>
-        {(project.clientName || project.projectType) && (
+        {(project.developerName || project.projectType) && (
           <p className="text-white/60 text-sm mt-0.5">
-            {[project.clientName && `Client: ${project.clientName}`, project.projectType]
+            {[project.developerName && `Developer: ${project.developerName}`, project.projectType]
               .filter(Boolean)
               .join(' · ')}
           </p>
         )}
         <div className="flex justify-center gap-4 mt-2 text-sm">
-          {project.contractValueLakh && (
+          {project.squareFeet && (
             <span className="font-mono font-semibold text-amber">
-              ₹{project.contractValueLakh >= 100
-                ? `${(project.contractValueLakh / 100).toFixed(1)} Cr`
-                : `${project.contractValueLakh} L`}{' '}
-              contract value
+              {project.squareFeet.toLocaleString('en-IN')} sq ft
             </span>
+          )}
+          {project.elevationFloors && (
+            <span className="text-white/50">G+{project.elevationFloors}</span>
           )}
           {project.completedYear && <span className="text-white/50">{project.completedYear}</span>}
         </div>

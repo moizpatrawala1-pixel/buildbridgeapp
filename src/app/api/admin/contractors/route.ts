@@ -15,10 +15,13 @@ import { prisma } from '@/lib/prisma';
 
 const projectSchema = z.object({
   title: z.string().trim().min(1).max(200),
-  clientName: z.string().trim().max(200).optional(),
+  developerName: z.string().trim().max(200).optional(),
   projectType: z.string().trim().max(200).optional(),
-  contractValueLakh: z.number().int().positive().optional(),
   completedYear: z.number().int().min(1990).max(2100).optional(),
+  squareFeet: z.number().int().positive().optional(),
+  elevationFloors: z.number().int().positive().optional(),
+  committedDurationMonths: z.number().int().positive().optional(),
+  actualDurationMonths: z.number().int().positive().optional(),
   imageUrls: z.array(z.string().url()).max(10).default([]),
 });
 
@@ -117,10 +120,13 @@ export async function POST(req: NextRequest) {
       projects: {
         create: data.projects.map((p) => ({
           title: p.title,
-          clientName: p.clientName,
+          developerName: p.developerName,
           projectType: p.projectType,
-          contractValueLakh: p.contractValueLakh,
           completedYear: p.completedYear,
+          squareFeet: p.squareFeet,
+          elevationFloors: p.elevationFloors,
+          committedDurationMonths: p.committedDurationMonths,
+          actualDurationMonths: p.actualDurationMonths,
           imageUrls: p.imageUrls,
         })),
       },

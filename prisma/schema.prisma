@@ -111,10 +111,20 @@ model Project {
   contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
 
   title            String
-  clientName       String? // e.g. "Vasudha Group" — omit if client asked not to be named
+  developerName    String? // the developer/client this was built for — omit if they asked not to be named
   projectType      String? // e.g. "Residential, 18 floors"
-    contractValueLakh Int?   // contract value in ₹ lakh
   completedYear    Int?
+
+  squareFeet       Int?    // built-up area in sq ft
+  elevationFloors  Int?    // number of floors, e.g. 18 for a "G+18" building
+
+  // Timeline as committed to the developer vs how long the project actually
+  // took, both in months. Committed comes from what the contractor promised
+  // up front; actual is filled in once the project wrapped. Either can be
+  // left blank if unknown — this is admin-entered from what the contractor
+  // reports, not independently verified.
+  committedDurationMonths Int?
+  actualDurationMonths    Int?
 
   // Photos of the completed project — stored as an array of Vercel Blob
   // URLs, in the order they should be displayed. A project can have zero

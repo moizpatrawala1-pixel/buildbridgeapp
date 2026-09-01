@@ -47,10 +47,13 @@ type SeedContractor = {
   bio?: string;
   projects?: {
     title: string;
-    clientName?: string;
+    developerName?: string;
     projectType?: string;
-    contractValueLakh?: number;
     completedYear?: number;
+    squareFeet?: number;
+    elevationFloors?: number;
+    committedDurationMonths?: number;
+    actualDurationMonths?: number;
   }[];
 };
 
@@ -143,10 +146,13 @@ async function main() {
           data: {
             contractorId: contractor.id,
             title: p.title,
-            clientName: p.clientName,
+            developerName: p.developerName,
             projectType: p.projectType,
-            contractValueLakh: p.contractValueLakh,
             completedYear: p.completedYear,
+            squareFeet: p.squareFeet,
+            elevationFloors: p.elevationFloors,
+            committedDurationMonths: p.committedDurationMonths,
+            actualDurationMonths: p.actualDurationMonths,
           },
         });
       }
