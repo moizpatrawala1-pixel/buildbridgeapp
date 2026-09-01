@@ -1,64 +1,59 @@
 // src/app/admin/page.tsx
 //
-// Admin login. Checks the shared ADMIN_PASSWORD against
-// POST /api/admin/login, which sets a session cookie on success.
+// Server component. Checks the admin session cookie directly (no client
+// round-trip, no flash of the wrong content) and renders either the login
+// form or the dashboard with the three admin actions: add a contractor,
+// manage existing contractors, and view current users.
 
-'use client';
+import Link from 'next/link';
+import { isAdminAuthenticated } from '@/lib/admin-auth';
+import AdminLoginForm from './login-form';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+export default async function AdminPage() {
+  const authenticated = await isAdminAuthenticated();
 
-export default function AdminLoginPage() {
-  const router = useRouter();
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setSubmitting(true);
-
-    const res = await fetch('/api/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
-    });
-
-    if (res.ok) {
-      router.push('/admin/contractors/new');
-    } else {
-      const data = await res.json();
-      setError(data.error ?? 'Incorrect password');
-      setSubmitting(false);
-    }
+  if (!authenticated) {
+    return <AdminLoginForm />;
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-charcoal px-6">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm bg-paper rounded-md p-8">
-        <h1 className="font-display font-bold text-2xl tracking-tight mb-1">Admin</h1>
-        <p className="text-charcoal/60 text-sm mb-6">Enter the admin password to continue.</p>
+    <main className="min-h-screen bg-paper py-10 px-6">
+      <div className="max-w-2xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="font-display font-bold text-2xl tracking-tight">Admin</h1>
+          <Link href="/browse" className="text-sm text-charcoal/50 hover:text-amber">
+            View live site →
+          </Link>
+        </div>
 
-        <input
-          type="password"
-          required
-          autoFocus
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-3.5 py-2.5 border border-line rounded-[4px] text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber mb-3"
-        />
+        <div className="grid gap-4">
+          <Link
+            href="/admin/contractors/new"
+            className="block bg-white border border-line rounded-md p-6 hover:border-amber transition-colors"
+          >
+            <h2 className="font-display font-semibold text-lg mb-1">New Contractor</h2>
+            <p className="text-charcoal/60 text-sm">Add a contractor to the directory by hand.</p>
+          </Link>
 
-        {error && <p className="text-sm text-red-600 mb-3">{error}</p>}
+          <Link
+            href="/admin/contractors"
+            className="block bg-white border border-line rounded-md p-6 hover:border-amber transition-colors"
+          >
+            <h2 className="font-display font-semibold text-lg mb-1">Manage Existing</h2>
+            <p className="text-charcoal/60 text-sm">
+              View all contractors, update verification status, or delete one.
+            </p>
+          </Link>
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full bg-charcoal text-paper font-semibold text-sm py-3 rounded-[3px] hover:bg-black transition-colors disabled:opacity-60"
-        >
-          {submitting ? 'Checking…' : 'Continue'}
-        </button>
-      </form>
+          <Link
+            href="/admin/developers"
+            className="block bg-white border border-line rounded-md p-6 hover:border-amber transition-colors"
+          >
+            <h2 className="font-display font-semibold text-lg mb-1">Current Users</h2>
+            <p className="text-charcoal/60 text-sm">See everyone who has signed up on the site.</p>
+          </Link>
+        </div>
+      </div>
     </main>
   );
 }
