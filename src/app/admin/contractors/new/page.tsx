@@ -12,6 +12,10 @@
 // Logo and project photo uploads happen immediately on file selection (see
 // ImageUpload's own comment) — by the time this form is submitted, every
 // image is already a real URL sitting in the payload, not a raw file.
+// The submit button is disabled while any upload is still in flight (see
+// uploadsInFlight below) — without that, clicking submit right after
+// selecting a photo could fire before that photo's URL made it into state,
+// silently dropping it from what actually gets saved.
 
 'use client';
 
@@ -54,6 +58,15 @@ export default function NewContractorPage() {
   const [bio, setBio] = useState('');
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [projects, setProjects] = useState<ProjectDraft[]>([]);
+  // Counts logo + project photo uploads currently in progress. The submit
+  // button stays disabled while this is above 0, so clicking "Add
+  // Contractor" can never fire before a still-uploading photo's URL has
+  // made it into state — that gap was silently dropping photos before.
+  const [uploadsInFlight, setUploadsInFlight] = useState(0);
+
+  function trackUpload(uploading: boolean) {
+    setUploadsInFlight((n) => n + (uploading ? 1 : -1));
+  }
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -186,7 +199,7 @@ export default function NewContractorPage() {
             <input required value={name} onChange={(e) => setName(e.target.value)} className={inputCls} />
           </Field>
 
-          <ImageUpload label="Logo (optional)" value={logoUrl} onChange={setLogoUrl} />
+          <ImageUpload label="Logo (optional)" value={logoUrl} onChange={setLogoUrl} onUploadStateChange={trackUpload} />
 
           <div className="grid grid-cols-2 gap-4">
             <Field label="City">
@@ -334,6 +347,7 @@ export default function NewContractorPage() {
                         label={p.imageUrls.length === 0 ? 'Add photo' : 'Add another'}
                         value={null}
                         onChange={(url) => url && addProjectImage(i, url)}
+                        onUploadStateChange={trackUpload}
                       />
                     </div>
                   </div>
@@ -342,12 +356,17 @@ export default function NewContractorPage() {
             </div>
           </div>
 
+          {uploadsInFlight > 0 && (
+            <p className="text-xs text-charcoal/50 -mt-1">
+              Waiting for {uploadsInFlight} photo{uploadsInFlight === 1 ? '' : 's'} to finish uploading…
+            </p>
+          )}
           <button
             type="submit"
-            disabled={submitting}
+            disabled={submitting || uploadsInFlight > 0}
             className="mt-2 bg-amber text-white font-semibold text-sm py-3 rounded-[3px] hover:bg-[#be6520] transition-colors disabled:opacity-60"
           >
-            {submitting ? 'Adding…' : 'Add Contractor'}
+            {submitting ? 'Adding…' : uploadsInFlight > 0 ? 'Waiting for photos…' : 'Add Contractor'}
           </button>
         </form>
       </div>
