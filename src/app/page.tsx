@@ -29,38 +29,38 @@ export default function Home() {
     <>
       <Nav />
 
-      <header className="bg-charcoal text-paper pt-22 pb-16 relative overflow-hidden">
+      <header className="bg-paper text-charcoal pt-22 pb-16 relative overflow-hidden">
         <div
-          className="absolute inset-0 opacity-[0.06] pointer-events-none"
+          className="absolute inset-0 opacity-[0.05] pointer-events-none"
           style={{
             backgroundImage:
-              'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+              'linear-gradient(#1c1e22 1px, transparent 1px), linear-gradient(90deg, #1c1e22 1px, transparent 1px)',
             backgroundSize: '48px 48px',
           }}
         />
         <div className="max-w-[1440px] mx-auto px-8 relative z-10">
-          <div className="font-mono text-xs font-medium tracking-widest uppercase text-amber-soft flex items-center gap-2.5 mb-5">
-            <span className="w-5 h-[1.5px] bg-amber-soft" />
+          <div className="font-mono text-xs font-medium tracking-widest uppercase text-amber flex items-center gap-2.5 mb-5">
+            <span className="w-5 h-[1.5px] bg-amber" />
             Licensed &amp; Verified Network
           </div>
-          <p className="font-display text-xl md:text-2xl font-bold text-amber-soft tracking-tight mb-4">Kaam. Connected.</p>
+          <p className="font-display text-xl md:text-2xl font-bold text-amber tracking-tight mb-4">Kaam. Connected.</p>
           <h1 className="font-display font-bold text-[clamp(38px,4.6vw,60px)] leading-[1.05] tracking-tight mb-5 max-w-2xl">
-            Build with contractors who&apos;ve <span className="text-amber-soft">proven</span> it before.
+            Build with contractors who&apos;ve <span className="text-amber">proven</span> it before.
           </h1>
-          <p className="text-[17px] leading-relaxed text-paper/68 max-w-[480px] mb-9">
-            (Kalm) connects developers with licensed contractors — every profile backed by
+          <p className="text-[17px] leading-relaxed text-charcoal/65 max-w-[480px] mb-9">
+            (kalm) connects developers with licensed contractors — every profile backed by
             verified project history, not just claims.
           </p>
           <div className="flex gap-3.5 flex-wrap">
             <Link
               href="/browse"
-              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] bg-amber text-white hover:bg-[#be6520] transition-colors"
+              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] bg-amber text-white hover:bg-amber-dark transition-colors"
             >
               Browse Contractors
             </Link>
             <Link
               href="/signup"
-              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] border-[1.5px] border-line-dark text-paper hover:border-amber hover:text-amber transition-colors"
+              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] border-[1.5px] border-line text-charcoal hover:border-amber hover:text-amber transition-colors"
             >
               Get Started
             </Link>
@@ -94,7 +94,7 @@ export default function Home() {
               { n: '04', title: 'Negotiate & decide', body: 'You talk terms directly. If it\'s a match, great. If not, no obligation either way.' },
             ].map((step) => (
               <div key={step.n}>
-                <div className="w-[54px] h-[54px] rounded-full bg-charcoal border-[1.5px] border-amber flex items-center justify-center font-mono font-semibold text-amber-soft mb-5">
+                <div className="w-[54px] h-[54px] rounded-full bg-paper-dim border-[1.5px] border-amber flex items-center justify-center font-mono font-semibold text-amber mb-5">
                   {step.n}
                 </div>
                 <h4 className="font-display font-semibold text-base mb-2">{step.title}</h4>
@@ -172,12 +172,12 @@ export default function Home() {
       </section>
 
       {/* CLOSING CTA */}
-      <section className="py-24 bg-charcoal text-paper text-center relative overflow-hidden">
+      <section className="py-24 bg-paper-dim text-charcoal text-center relative overflow-hidden border-t border-line">
         <div
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          className="absolute inset-0 opacity-[0.05] pointer-events-none"
           style={{
             backgroundImage:
-              'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+              'linear-gradient(#1c1e22 1px, transparent 1px), linear-gradient(90deg, #1c1e22 1px, transparent 1px)',
             backgroundSize: '48px 48px',
           }}
         />
@@ -185,20 +185,20 @@ export default function Home() {
           <h2 className="font-display font-bold text-[clamp(32px,3.8vw,44px)] mb-4 leading-tight">
             Your next contractor is one search away.
           </h2>
-          <p className="text-paper/60 text-[15.5px] mb-9">
+          <p className="text-charcoal/60 text-[15.5px] mb-9">
             Browse licensed contractors with verified project history, or list your own business
             to get discovered.
           </p>
           <div className="flex gap-3.5 flex-wrap justify-center">
             <Link
               href="/browse"
-              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] bg-amber text-white hover:bg-[#be6520] transition-colors"
+              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] bg-amber text-white hover:bg-amber-dark transition-colors"
             >
               Browse Contractors
             </Link>
             <Link
               href="/admin"
-              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] border-[1.5px] border-line-dark text-paper hover:border-amber hover:text-amber transition-colors"
+              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] border-[1.5px] border-line text-charcoal hover:border-amber hover:text-amber transition-colors"
             >
               List Your Business
             </Link>
