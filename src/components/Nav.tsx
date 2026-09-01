@@ -22,9 +22,7 @@ export default function Nav() {
     <nav className="sticky top-0 z-50 bg-paper/95 backdrop-blur-sm border-b border-line">
       <div className="max-w-[1440px] mx-auto px-8 h-[72px] flex items-center justify-between">
         <Link href="/" className="font-display text-2xl tracking-tight text-charcoal flex items-baseline">
-          <span className="font-light text-charcoal/70">(</span>
-          <span className="font-extrabold">kalm</span>
-          <span className="font-light text-charcoal/70">)</span>
+          <span className="font-light">(kalm)</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-10">

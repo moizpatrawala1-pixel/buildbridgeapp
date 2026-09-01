@@ -9,9 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 pb-12 border-b border-line">
           <div>
             <div className="font-display text-xl text-charcoal mb-3.5 flex items-baseline">
-              <span className="font-light text-charcoal/60">(</span>
-              <span className="font-extrabold">kalm</span>
-              <span className="font-light text-charcoal/60">)</span>
+              <span className="font-light">(kalm)</span>
             </div>
             <p className="text-sm leading-relaxed max-w-[260px]">
               Connecting developers, licensed contractors, and material suppliers on one verified network.

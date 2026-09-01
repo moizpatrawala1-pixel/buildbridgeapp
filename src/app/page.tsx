@@ -43,7 +43,7 @@ export default function Home() {
             <span className="w-5 h-[1.5px] bg-amber-soft" />
             Licensed &amp; Verified Network
           </div>
-          <p className="font-mono text-sm text-amber-soft tracking-wide mb-4">Kaam. Connected.</p>
+          <p className="font-display text-xl md:text-2xl font-bold text-amber-soft tracking-tight mb-4">Kaam. Connected.</p>
           <h1 className="font-display font-bold text-[clamp(38px,4.6vw,60px)] leading-[1.05] tracking-tight mb-5 max-w-2xl">
             Build with contractors who&apos;ve <span className="text-amber-soft">proven</span> it before.
           </h1>
