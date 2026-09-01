@@ -22,9 +22,14 @@ type ImageUploadProps = {
   label: string;
   value: string | null;
   onChange: (url: string | null) => void;
+  // Optional: lets a parent form know when this upload starts/finishes, so
+  // it can disable its submit button while a photo is still mid-upload.
+  // Without this, submitting while an upload is in flight silently drops
+  // that photo — the form has no way to know to wait for it.
+  onUploadStateChange?: (uploading: boolean) => void;
 };
 
-export default function ImageUpload({ label, value, onChange }: ImageUploadProps) {
+export default function ImageUpload({ label, value, onChange, onUploadStateChange }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,6 +39,7 @@ export default function ImageUpload({ label, value, onChange }: ImageUploadProps
 
     setError(null);
     setUploading(true);
+    onUploadStateChange?.(true);
 
     const formData = new FormData();
     formData.append('file', file);
@@ -55,6 +61,7 @@ export default function ImageUpload({ label, value, onChange }: ImageUploadProps
       setError('Upload failed. Please try again.');
     } finally {
       setUploading(false);
+      onUploadStateChange?.(false);
       e.target.value = '';
     }
   }
