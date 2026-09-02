@@ -15,7 +15,7 @@ const signupSchema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(200),
   email: z.string().trim().email('Enter a valid email address').max(320),
   password: z.string().min(8, 'Password must be at least 8 characters').max(200),
-  phone: z.string().trim().max(20).optional(),
+  phone: z.string().trim().min(7, 'Enter a valid phone number').max(20),
 });
 
 export async function POST(req: NextRequest) {

@@ -150,7 +150,7 @@ model Developer {
   email        String @unique
   passwordHash String
 
-  phone String? // collected at signup or first quote request
+  phone String? // required at signup going forward; stays nullable so accounts created before this change don't break
 
   quoteRequests QuoteRequest[]
 

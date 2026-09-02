@@ -13,6 +13,7 @@ export default function SignupPage() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -26,7 +27,7 @@ export default function SignupPage() {
       const res = await fetch('/api/developers/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, phone, password }),
       });
 
       const data = await res.json();
@@ -82,6 +83,18 @@ export default function SignupPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-3.5 py-2.5 border border-line rounded-[4px] text-sm bg-paper focus:outline-none focus:ring-2 focus:ring-ink"
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Phone</label>
+              <input
+                type="tel"
+                required
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+91XXXXXXXXXX"
+                className="w-full px-3.5 py-2.5 border border-line rounded-[4px] text-sm bg-paper focus:outline-none focus:ring-2 focus:ring-ink"
+              />
+              <p className="text-xs text-stone mt-1">So contractors can reach you about your quote requests.</p>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5">Password</label>
