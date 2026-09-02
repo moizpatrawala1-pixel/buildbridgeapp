@@ -47,6 +47,26 @@ export default function Home() {
         </div>
       </header>
 
+      <section className="py-24 bg-paper-dim border-t border-line">
+        <div className="max-w-[880px] mx-auto px-8">
+          <h2 className="font-display font-light text-[clamp(28px,3.2vw,38px)] text-center text-ink mb-14">
+            Every trade, one directory.
+          </h2>
+
+          <div className="flex flex-wrap justify-center gap-3">
+            {TRADE_CATEGORIES.map((trade) => (
+              <Link
+                key={trade}
+                href={`/browse?trade=${encodeURIComponent(trade)}`}
+                className="text-sm px-5 py-2.5 rounded-full border border-line bg-paper text-ink hover:border-ink transition-colors"
+              >
+                {trade}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="py-24 border-t border-line">
         <div className="max-w-[880px] mx-auto px-8">
           <h2 className="font-display font-light text-[clamp(28px,3.2vw,38px)] text-center text-ink mb-16">
@@ -69,26 +89,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-24 bg-paper-dim border-t border-line">
-        <div className="max-w-[880px] mx-auto px-8">
-          <h2 className="font-display font-light text-[clamp(28px,3.2vw,38px)] text-center text-ink mb-14">
-            Every trade, one directory.
-          </h2>
-
-          <div className="flex flex-wrap justify-center gap-3">
-            {TRADE_CATEGORIES.map((trade) => (
-              <Link
-                key={trade}
-                href={`/browse?trade=${encodeURIComponent(trade)}`}
-                className="text-sm px-5 py-2.5 rounded-full border border-line bg-paper text-ink hover:border-ink transition-colors"
-              >
-                {trade}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="py-24 border-t border-line">
         <div className="max-w-[640px] mx-auto px-8 text-center">
           <h2 className="font-display font-light text-[clamp(28px,3.2vw,38px)] text-ink mb-6">
@@ -105,32 +105,6 @@ export default function Home() {
           <span className="inline-flex items-center gap-2 text-sm text-ink border border-line rounded-full px-5 py-2.5">
             ( verified — license checked independently )
           </span>
-        </div>
-      </section>
-
-      <section className="py-28 border-t border-line text-center">
-        <div className="max-w-[560px] mx-auto px-8">
-          <h2 className="font-display font-light text-[clamp(30px,3.6vw,42px)] text-ink mb-5 leading-tight">
-            Your next contractor is one search away.
-          </h2>
-          <p className="text-stone text-[15.5px] mb-10">
-            Browse licensed contractors with verified project history, or list your own business
-            to get discovered.
-          </p>
-          <div className="flex gap-4 flex-wrap justify-center">
-            <Link
-              href="/browse"
-              className="inline-flex items-center justify-center text-sm px-7 py-3.5 rounded-full bg-ink text-paper hover:bg-stone transition-colors"
-            >
-              Browse Contractors
-            </Link>
-            <Link
-              href="/admin"
-              className="inline-flex items-center justify-center text-sm px-7 py-3.5 rounded-full border border-line text-ink hover:border-ink transition-colors"
-            >
-              List Your Business
-            </Link>
-          </div>
         </div>
       </section>
 
