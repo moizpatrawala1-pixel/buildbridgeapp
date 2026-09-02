@@ -1,10 +1,11 @@
 // src/app/about/page.tsx
 //
-// Founder bios are deliberately short and role-based — title + area of
-// responsibility only, no invented backstory (years of experience, past
-// companies, etc.) since that would be putting words in real people's
-// mouths on a real, public page. Update FOUNDERS below directly if bios
-// need to grow later; each entry stays independent of any other page.
+// Founder bios draw only on facts actually known to be true (the Northstar
+// Web connection between Moiz and Anas, Moiz's family manufacturing
+// business) plus each person's real role at (kalm) — no invented years of
+// experience, past employers, or achievements. Hassan's bio is kept more
+// general since no verified background was available for him; expand it
+// with real specifics rather than invented ones if/when they're provided.
 
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
@@ -13,17 +14,17 @@ const FOUNDERS = [
   {
     name: 'Moiz Patrawala',
     role: 'Co-founder — Tech & Finance',
-    bio: 'Leads product and engineering for (kalm), and oversees the numbers behind it.',
+    bio: "Moiz co-founded Northstar Web, a Mumbai studio building sites for small businesses, and has spent time on the finance and operations side of his family's manufacturing business. That mix — building software on one side, running a real operating business on the other — is where (kalm) came from. He leads product and engineering, and keeps an eye on the numbers underneath it.",
   },
   {
     name: 'Hassan Birya',
     role: 'Co-founder — Legal & Finance',
-    bio: 'Handles the legal and financial foundations (kalm) is built on.',
+    bio: "Hassan handles the legal and financial groundwork (kalm) is built on — the contracts, the compliance, the parts of a marketplace that have to be right before anything else can work.",
   },
   {
     name: 'Anas Maklai',
     role: 'Co-founder — Marketing & Growth',
-    bio: 'Drives how (kalm) reaches developers and contractors, and how it grows.',
+    bio: "Anas co-founded Northstar Web alongside Moiz before the two of them started (kalm) together. He's focused on getting the platform in front of the developers and contractors who need it, and making sure growth doesn't come at the cost of what the Verified badge is supposed to mean.",
   },
 ];
 
@@ -58,15 +59,15 @@ export default function AboutPage() {
             Meet the founders.
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {FOUNDERS.map((f) => (
-              <div key={f.name} className="text-center">
+              <div key={f.name}>
                 <div className="w-20 h-20 rounded-full bg-ink text-paper font-display text-xl flex items-center justify-center mx-auto mb-5">
                   {initials(f.name)}
                 </div>
-                <h3 className="font-display text-lg text-ink mb-1">{f.name}</h3>
-                <p className="text-xs text-amber font-medium mb-3 tracking-wide uppercase">{f.role}</p>
-                <p className="text-sm text-stone leading-relaxed max-w-[240px] mx-auto">{f.bio}</p>
+                <h3 className="font-display text-lg text-ink mb-1 text-center">{f.name}</h3>
+                <p className="text-xs text-amber font-medium mb-4 tracking-wide uppercase text-center">{f.role}</p>
+                <p className="text-sm text-stone leading-relaxed text-left">{f.bio}</p>
               </div>
             ))}
           </div>
