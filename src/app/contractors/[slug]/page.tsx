@@ -14,10 +14,13 @@ import ProjectLightbox from '@/components/ProjectLightbox';
 type Project = {
   id: string;
   title: string;
-  clientName: string | null;
+  developerName: string | null;
   projectType: string | null;
-  contractValueLakh: number | null;
   completedYear: number | null;
+  squareFeet: number | null;
+  elevationFloors: number | null;
+  committedDurationMonths: number | null;
+  actualDurationMonths: number | null;
   imageUrls: string[];
 };
 
@@ -203,15 +206,15 @@ export default function ContractorProfilePage() {
                   <ProjectGallery imageUrls={p.imageUrls} />
                   <div className="p-4">
                     <h3 className="font-display text-[15px] mb-1">{p.title}</h3>
-                    {(p.clientName || p.projectType) && (
+                    {(p.developerName || p.projectType) && (
                       <p className="text-xs text-stone mb-3">
-                        {[p.clientName && `Client: ${p.clientName}`, p.projectType].filter(Boolean).join(' · ')}
+                        {[p.developerName && `Developer: ${p.developerName}`, p.projectType].filter(Boolean).join(' · ')}
                       </p>
                     )}
                     <div className="flex justify-between items-center pt-3 border-t border-line">
-                      {p.contractValueLakh && (
+                      {p.squareFeet && (
                         <span className="font-medium text-sm text-ink">
-                          ₹{p.contractValueLakh >= 100 ? `${(p.contractValueLakh / 100).toFixed(1)} Cr` : `${p.contractValueLakh} L`} contract value
+                          {p.squareFeet.toLocaleString('en-IN')} sq ft
                         </span>
                       )}
                       {p.completedYear && <span className="text-xs text-stone">{p.completedYear}</span>}

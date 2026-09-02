@@ -8,18 +8,24 @@ import ImageUpload from '@/components/ImageUpload';
 
 type ProjectDraft = {
   title: string;
-  clientName: string;
+  developerName: string;
+  squareFeet: string;
+  elevationFloors: string;
+  committedDurationMonths: string;
+  actualDurationMonths: string;
   projectType: string;
-  contractValueLakh: string;
   completedYear: string;
   imageUrls: string[];
 };
 
 const emptyProject = (): ProjectDraft => ({
   title: '',
-  clientName: '',
+  developerName: '',
+  squareFeet: '',
+  elevationFloors: '',
+  committedDurationMonths: '',
+  actualDurationMonths: '',
   projectType: '',
-  contractValueLakh: '',
   completedYear: '',
   imageUrls: [],
 });
@@ -94,9 +100,12 @@ export default function NewContractorPage() {
         .filter((p) => p.title.trim())
         .map((p) => ({
           title: p.title,
-          clientName: p.clientName || undefined,
+          developerName: p.developerName || undefined,
+          squareFeet: p.squareFeet ? Number(p.squareFeet) : undefined,
+          elevationFloors: p.elevationFloors ? Number(p.elevationFloors) : undefined,
+          committedDurationMonths: p.committedDurationMonths ? Number(p.committedDurationMonths) : undefined,
+          actualDurationMonths: p.actualDurationMonths ? Number(p.actualDurationMonths) : undefined,
           projectType: p.projectType || undefined,
-          contractValueLakh: p.contractValueLakh ? Number(p.contractValueLakh) : undefined,
           completedYear: p.completedYear ? Number(p.completedYear) : undefined,
           imageUrls: p.imageUrls,
         })),
@@ -274,9 +283,9 @@ export default function NewContractorPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-2.5 mb-3">
                     <input
-                      value={p.clientName}
-                      onChange={(e) => updateProject(i, 'clientName', e.target.value)}
-                      placeholder="Client name (optional)"
+                      value={p.developerName}
+                      onChange={(e) => updateProject(i, 'developerName', e.target.value)}
+                      placeholder="Developer name (optional)"
                       className={inputCls}
                     />
                     <input
@@ -287,8 +296,36 @@ export default function NewContractorPage() {
                     />
                     <input
                       type="number"
-                      value={p.contractValueLakh}
-                      onChange={(e) => updateProject(i, 'contractValueLakh', e.target.value)}
+                      value={p.squareFeet}
+                      onChange={(e) => updateProject(i, 'squareFeet', e.target.value)}
+                      placeholder="Square feet"
+                      className={inputCls}
+                    />
+                    <input
+                      type="number"
+                      value={p.elevationFloors}
+                      onChange={(e) => updateProject(i, 'elevationFloors', e.target.value)}
+                      placeholder="Floors (e.g. 18 for G+18)"
+                      className={inputCls}
+                    />
+                    <input
+                      type="number"
+                      value={p.committedDurationMonths}
+                      onChange={(e) => updateProject(i, 'committedDurationMonths', e.target.value)}
+                      placeholder="Committed duration (months)"
+                      className={inputCls}
+                    />
+                    <input
+                      type="number"
+                      value={p.actualDurationMonths}
+                      onChange={(e) => updateProject(i, 'actualDurationMonths', e.target.value)}
+                      placeholder="Actual duration (months)"
+                      className={inputCls}
+                    />
+                    <input
+                      type="number"
+                      value={p.completedYear}
+                      onChange={(e) => updateProject(i, 'completedYear', e.target.value)}
                       placeholder="Contract value (₹ lakh)"
                       className={inputCls}
                     />
