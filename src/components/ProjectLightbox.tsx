@@ -152,6 +152,13 @@ export default function ProjectLightbox({ project, onClose }: ProjectLightboxPro
           )}
           {project.completedYear && <span className="text-white/50">{project.completedYear}</span>}
         </div>
+        {(project.committedDurationMonths || project.actualDurationMonths) && (
+          <p className="text-white/50 text-xs mt-2">
+            {project.committedDurationMonths && `Committed: ${project.committedDurationMonths} mo`}
+            {project.committedDurationMonths && project.actualDurationMonths && ' · '}
+            {project.actualDurationMonths && `Actual: ${project.actualDurationMonths} mo`}
+          </p>
+        )}
         {hasMultiple && (
           <p className="text-white/40 text-xs mt-2 font-mono">
             {index + 1} / {project.imageUrls.length}

@@ -206,9 +206,13 @@ export default function ContractorProfilePage() {
                   <ProjectGallery imageUrls={p.imageUrls} />
                   <div className="p-4">
                     <h3 className="font-display text-[15px] mb-1">{p.title}</h3>
-                    {(p.developerName || p.projectType) && (
+                    {(p.developerName || p.projectType || p.elevationFloors) && (
                       <p className="text-xs text-stone mb-3">
-                        {[p.developerName && `Developer: ${p.developerName}`, p.projectType].filter(Boolean).join(' · ')}
+                        {[
+                          p.developerName && `Developer: ${p.developerName}`,
+                          p.projectType,
+                          p.elevationFloors && `G+${p.elevationFloors}`,
+                        ].filter(Boolean).join(' · ')}
                       </p>
                     )}
                     <div className="flex justify-between items-center pt-3 border-t border-line">
@@ -219,6 +223,13 @@ export default function ContractorProfilePage() {
                       )}
                       {p.completedYear && <span className="text-xs text-stone">{p.completedYear}</span>}
                     </div>
+                    {(p.committedDurationMonths || p.actualDurationMonths) && (
+                      <p className="text-xs text-stone mt-2">
+                        {p.committedDurationMonths && `Committed: ${p.committedDurationMonths} mo`}
+                        {p.committedDurationMonths && p.actualDurationMonths && ' · '}
+                        {p.actualDurationMonths && `Actual: ${p.actualDurationMonths} mo`}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
