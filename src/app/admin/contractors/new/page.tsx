@@ -1,21 +1,4 @@
 // src/app/admin/contractors/new/page.tsx
-//
-// The form you'll actually use to add contractors. Posts to
-// /api/admin/contractors, which is gated by the admin session cookie — if
-// that cookie is missing or wrong, the POST returns 401 and this page shows
-// that error rather than pretending it worked.
-//
-// verificationStatus defaults to PENDING, not VERIFIED — see the comment on
-// the schema's VerificationStatus enum. Only flip it to VERIFIED here once
-// you've actually confirmed the license number.
-//
-// Logo and project photo uploads happen immediately on file selection (see
-// ImageUpload's own comment) — by the time this form is submitted, every
-// image is already a real URL sitting in the payload, not a raw file.
-// The submit button is disabled while any upload is still in flight (see
-// uploadsInFlight below) — without that, clicking submit right after
-// selecting a photo could fire before that photo's URL made it into state,
-// silently dropping it from what actually gets saved.
 
 'use client';
 
@@ -25,25 +8,19 @@ import ImageUpload from '@/components/ImageUpload';
 
 type ProjectDraft = {
   title: string;
-  developerName: string;
+  clientName: string;
   projectType: string;
+  contractValueLakh: string;
   completedYear: string;
-  squareFeet: string;
-  elevationFloors: string;
-  committedDurationMonths: string;
-  actualDurationMonths: string;
   imageUrls: string[];
 };
 
 const emptyProject = (): ProjectDraft => ({
   title: '',
-  developerName: '',
+  clientName: '',
   projectType: '',
+  contractValueLakh: '',
   completedYear: '',
-  squareFeet: '',
-  elevationFloors: '',
-  committedDurationMonths: '',
-  actualDurationMonths: '',
   imageUrls: [],
 });
 
@@ -64,15 +41,6 @@ export default function NewContractorPage() {
   const [bio, setBio] = useState('');
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [projects, setProjects] = useState<ProjectDraft[]>([]);
-  // Counts logo + project photo uploads currently in progress. The submit
-  // button stays disabled while this is above 0, so clicking "Add
-  // Contractor" can never fire before a still-uploading photo's URL has
-  // made it into state — that gap was silently dropping photos before.
-  const [uploadsInFlight, setUploadsInFlight] = useState(0);
-
-  function trackUpload(uploading: boolean) {
-    setUploadsInFlight((n) => n + (uploading ? 1 : -1));
-  }
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -126,13 +94,10 @@ export default function NewContractorPage() {
         .filter((p) => p.title.trim())
         .map((p) => ({
           title: p.title,
-          developerName: p.developerName || undefined,
+          clientName: p.clientName || undefined,
           projectType: p.projectType || undefined,
+          contractValueLakh: p.contractValueLakh ? Number(p.contractValueLakh) : undefined,
           completedYear: p.completedYear ? Number(p.completedYear) : undefined,
-          squareFeet: p.squareFeet ? Number(p.squareFeet) : undefined,
-          elevationFloors: p.elevationFloors ? Number(p.elevationFloors) : undefined,
-          committedDurationMonths: p.committedDurationMonths ? Number(p.committedDurationMonths) : undefined,
-          actualDurationMonths: p.actualDurationMonths ? Number(p.actualDurationMonths) : undefined,
           imageUrls: p.imageUrls,
         })),
     };
@@ -180,20 +145,20 @@ export default function NewContractorPage() {
   }
 
   return (
-    <main className="min-h-screen bg-paper py-10 px-6">
+    <main className="min-h-screen bg-paper-dim py-10 px-6">
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center justify-between mb-1">
-          <h1 className="font-display font-bold text-2xl tracking-tight">Add a Contractor</h1>
-          <Link href="/browse" className="text-sm text-charcoal/50 hover:text-amber">
+          <h1 className="font-display font-light text-2xl">Add a Contractor</h1>
+          <Link href="/browse" className="text-sm text-stone hover:text-ink">
             View live site →
           </Link>
         </div>
-        <p className="text-charcoal/60 text-sm mb-8">
+        <p className="text-stone text-sm mb-8">
           Only set status to Verified once you&apos;ve confirmed the license number.
         </p>
 
         {success && (
-          <div className="bg-verified-soft border border-verified/25 text-verified text-sm rounded-md p-3.5 mb-5">
+          <div className="bg-sage-soft border border-sage/25 text-sage text-sm rounded-md p-3.5 mb-5">
             {success}
           </div>
         )}
@@ -203,12 +168,12 @@ export default function NewContractorPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5 bg-white border border-line rounded-md p-6">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 bg-paper border border-line rounded-md p-6">
           <Field label="Business name">
             <input required value={name} onChange={(e) => setName(e.target.value)} className={inputCls} />
           </Field>
 
-          <ImageUpload label="Logo (optional)" value={logoUrl} onChange={setLogoUrl} onUploadStateChange={trackUpload} />
+          <ImageUpload label="Logo (optional)" value={logoUrl} onChange={setLogoUrl} />
 
           <div className="grid grid-cols-2 gap-4">
             <Field label="City">
@@ -282,20 +247,20 @@ export default function NewContractorPage() {
 
           <div>
             <div className="flex justify-between items-center mb-3">
-              <h3 className="font-semibold text-sm">Completed projects (optional)</h3>
-              <button type="button" onClick={addProjectRow} className="text-xs font-medium text-amber">
+              <h3 className="font-medium text-sm">Completed projects (optional)</h3>
+              <button type="button" onClick={addProjectRow} className="text-xs font-medium text-ink">
                 + Add project
               </button>
             </div>
             {projects.length === 0 && (
-              <p className="text-xs text-charcoal/50">
+              <p className="text-xs text-stone">
                 No projects added. It&apos;s fine to leave this empty and add projects later — an empty
                 list is more honest than one made up.
               </p>
             )}
             <div className="flex flex-col gap-3">
               {projects.map((p, i) => (
-                <div key={i} className="border border-line rounded-md p-3.5 bg-paper">
+                <div key={i} className="border border-line rounded-md p-3.5 bg-paper-dim">
                   <div className="flex justify-between items-start mb-2.5">
                     <input
                       value={p.title}
@@ -309,9 +274,9 @@ export default function NewContractorPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-2.5 mb-3">
                     <input
-                      value={p.developerName}
-                      onChange={(e) => updateProject(i, 'developerName', e.target.value)}
-                      placeholder="Developer name (optional)"
+                      value={p.clientName}
+                      onChange={(e) => updateProject(i, 'clientName', e.target.value)}
+                      placeholder="Client name (optional)"
                       className={inputCls}
                     />
                     <input
@@ -322,30 +287,9 @@ export default function NewContractorPage() {
                     />
                     <input
                       type="number"
-                      value={p.squareFeet}
-                      onChange={(e) => updateProject(i, 'squareFeet', e.target.value)}
-                      placeholder="Square feet"
-                      className={inputCls}
-                    />
-                    <input
-                      type="number"
-                      value={p.elevationFloors}
-                      onChange={(e) => updateProject(i, 'elevationFloors', e.target.value)}
-                      placeholder="Floors (e.g. 18 for G+18)"
-                      className={inputCls}
-                    />
-                    <input
-                      type="number"
-                      value={p.committedDurationMonths}
-                      onChange={(e) => updateProject(i, 'committedDurationMonths', e.target.value)}
-                      placeholder="Committed duration (months)"
-                      className={inputCls}
-                    />
-                    <input
-                      type="number"
-                      value={p.actualDurationMonths}
-                      onChange={(e) => updateProject(i, 'actualDurationMonths', e.target.value)}
-                      placeholder="Actual duration (months)"
+                      value={p.contractValueLakh}
+                      onChange={(e) => updateProject(i, 'contractValueLakh', e.target.value)}
+                      placeholder="Contract value (₹ lakh)"
                       className={inputCls}
                     />
                     <input
@@ -377,7 +321,6 @@ export default function NewContractorPage() {
                         label={p.imageUrls.length === 0 ? 'Add photo' : 'Add another'}
                         value={null}
                         onChange={(url) => url && addProjectImage(i, url)}
-                        onUploadStateChange={trackUpload}
                       />
                     </div>
                   </div>
@@ -386,17 +329,12 @@ export default function NewContractorPage() {
             </div>
           </div>
 
-          {uploadsInFlight > 0 && (
-            <p className="text-xs text-charcoal/50 -mt-1">
-              Waiting for {uploadsInFlight} photo{uploadsInFlight === 1 ? '' : 's'} to finish uploading…
-            </p>
-          )}
           <button
             type="submit"
-            disabled={submitting || uploadsInFlight > 0}
-            className="mt-2 bg-amber text-white font-semibold text-sm py-3 rounded-[3px] hover:bg-[#be6520] transition-colors disabled:opacity-60"
+            disabled={submitting}
+            className="mt-2 bg-ink text-paper font-medium text-sm py-3 rounded-full hover:bg-stone transition-colors disabled:opacity-60"
           >
-            {submitting ? 'Adding…' : uploadsInFlight > 0 ? 'Waiting for photos…' : 'Add Contractor'}
+            {submitting ? 'Adding…' : 'Add Contractor'}
           </button>
         </form>
       </div>
@@ -404,12 +342,12 @@ export default function NewContractorPage() {
   );
 }
 
-const inputCls = 'w-full px-3 py-2.5 border border-line rounded-[4px] text-[13.5px] bg-paper focus:outline-none focus:ring-2 focus:ring-amber';
+const inputCls = 'w-full px-3 py-2.5 border border-line rounded-[4px] text-[13.5px] bg-paper focus:outline-none focus:ring-2 focus:ring-ink';
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-charcoal/60 mb-1.5">{label}</label>
+      <label className="block text-xs font-medium text-stone mb-1.5">{label}</label>
       {children}
     </div>
   );

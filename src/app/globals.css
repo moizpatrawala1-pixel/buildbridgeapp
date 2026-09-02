@@ -1,41 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
 :root {
-  --charcoal: #1c1e22;
-  --charcoal-soft: #24272c;
-  --steel: #3a3f47;
-  --paper: #f6f4ef;
-  --paper-dim: #ebe8e0;
-  --line: #dad6cc;
-  --line-dark: #3a3f47;
-  /* Muted terracotta/rust — the single accent color for the whole site.
-     Kept as --amber for now so we don't have to rename bg-amber/text-amber
-     etc. across every file at once; the token's meaning has just shifted
-     from "warm orange" to "muted rust" to match the (kalm) brand. */
-  --amber: #b8622f;
-  --amber-soft: #d99a6f;
-  --amber-dark: #96501f;
-  --verified: #3d5a40;
-  --verified-soft: #e8eee9;
+  --ink: #0a0a0b;
+  --paper: #fafaf8;
+  --paper-dim: #f0efea;
+  --line: #e2e0d8;
+  --stone: #6b6963;
+  --sage: #8b9a7e;
+  --sage-soft: #eef1ea;
 }
 
 @theme inline {
-  --color-charcoal: var(--charcoal);
-  --color-charcoal-soft: var(--charcoal-soft);
-  --color-steel: var(--steel);
+  --color-ink: var(--ink);
   --color-paper: var(--paper);
   --color-paper-dim: var(--paper-dim);
   --color-line: var(--line);
-  --color-amber: var(--amber);
-  --color-amber-soft: var(--amber-soft);
-  --color-amber-dark: var(--amber-dark);
-  --color-verified: var(--verified);
-  --color-verified-soft: var(--verified-soft);
+  --color-stone: var(--stone);
+  --color-sage: var(--sage);
+  --color-sage-soft: var(--sage-soft);
 
-  --font-display: "Outfit", sans-serif;
-  --font-body: "Outfit", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-display: "Fraunces", serif;
+  --font-body: "Inter", sans-serif;
 }
 
 * {
@@ -48,7 +34,7 @@ html {
 
 body {
   background: var(--paper);
-  color: var(--charcoal);
+  color: var(--ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
 }

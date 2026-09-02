@@ -1,10 +1,4 @@
 // src/app/contractors/[slug]/page.tsx
-//
-// Shows a contractor's real profile and projects. The quote request form is
-// only rendered as an actual form when the visitor is signed in — since
-// POST /api/quote-requests requires auth, showing the form to an anonymous
-// visitor and letting them hit a 401 on submit would be a confusing dead
-// end. Signed-out visitors instead see a prompt to sign in / sign up.
 
 'use client';
 
@@ -20,13 +14,10 @@ import ProjectLightbox from '@/components/ProjectLightbox';
 type Project = {
   id: string;
   title: string;
-  developerName: string | null;
+  clientName: string | null;
   projectType: string | null;
+  contractValueLakh: number | null;
   completedYear: number | null;
-  squareFeet: number | null;
-  elevationFloors: number | null;
-  committedDurationMonths: number | null;
-  actualDurationMonths: number | null;
   imageUrls: string[];
 };
 
@@ -127,7 +118,7 @@ export default function ContractorProfilePage() {
       <>
         <Nav />
         <main className="flex-1 flex items-center justify-center py-24">
-          <p className="text-charcoal/60">Contractor not found.</p>
+          <p className="text-stone">Contractor not found.</p>
         </main>
         <Footer />
       </>
@@ -139,7 +130,7 @@ export default function ContractorProfilePage() {
       <>
         <Nav />
         <main className="flex-1 flex items-center justify-center py-24">
-          <p className="text-charcoal/50 text-sm">Loading…</p>
+          <p className="text-stone text-sm">Loading…</p>
         </main>
         <Footer />
       </>
@@ -150,11 +141,11 @@ export default function ContractorProfilePage() {
     <>
       <Nav />
 
-      <header className="bg-charcoal text-paper pt-11 pb-9">
-        <div className="max-w-[1440px] mx-auto px-8">
+      <header className="bg-paper text-ink border-b border-line pt-11 pb-9">
+        <div className="max-w-[1180px] mx-auto px-8">
           <div className="flex items-start gap-5 flex-wrap justify-between">
             <div className="flex gap-5">
-                          <div className="w-[84px] h-[84px] rounded-xl bg-charcoal-soft border border-white/10 text-amber-soft font-display font-bold text-3xl flex items-center justify-center shrink-0 overflow-hidden">
+              <div className="w-[84px] h-[84px] rounded-xl bg-paper-dim border border-line text-ink font-display text-3xl flex items-center justify-center shrink-0 overflow-hidden">
                 {contractor.logoUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element -- external Blob URL
                   <img src={contractor.logoUrl} alt="" className="w-full h-full object-cover" />
@@ -164,26 +155,26 @@ export default function ContractorProfilePage() {
               </div>
               <div>
                 <div className="flex items-center gap-3 flex-wrap mb-2">
-                  <h1 className="font-display font-bold text-[28px] tracking-tight">{contractor.name}</h1>
+                  <h1 className="font-display font-light text-[28px]">{contractor.name}</h1>
                   {contractor.verificationStatus === 'VERIFIED' && (
-                    <span className="inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-wide text-verified bg-verified-soft border border-verified/25 rounded-full px-2.5 py-1">
+                    <span className="inline-flex items-center gap-1.5 text-[11px] text-sage bg-sage-soft border border-sage/25 rounded-full px-2.5 py-1">
                       ✓ Verified
                     </span>
                   )}
                 </div>
-                <div className="flex gap-4 flex-wrap text-[13.5px] text-paper/60 mb-3">
+                <div className="flex gap-4 flex-wrap text-[13.5px] text-stone mb-3">
                   <span>📍 {contractor.area}, {contractor.city}</span>
                   <span>🏗️ {contractor.tradeTypes.join(', ')}</span>
                   {contractor.yearsInBusiness && <span>📅 {contractor.yearsInBusiness}+ years in business</span>}
                 </div>
                 {contractor.reviewCount > 0 && (
                   <div className="flex items-center gap-2.5">
-                    <span className="text-amber text-base tracking-wide">
+                    <span className="text-ink text-base tracking-wide">
                       {'★'.repeat(Math.round(contractor.rating))}
                       {'☆'.repeat(5 - Math.round(contractor.rating))}
                     </span>
-                    <span className="font-mono font-semibold text-[15px]">{contractor.rating.toFixed(1)}</span>
-                    <span className="text-paper/55 text-[13.5px]">({contractor.reviewCount} reviews)</span>
+                    <span className="font-medium text-[15px]">{contractor.rating.toFixed(1)}</span>
+                    <span className="text-stone text-[13.5px]">({contractor.reviewCount} reviews)</span>
                   </div>
                 )}
               </div>
@@ -192,13 +183,13 @@ export default function ContractorProfilePage() {
         </div>
       </header>
 
-      <div className="max-w-[1440px] mx-auto px-8 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-11 py-12">
+      <div className="max-w-[1180px] mx-auto px-8 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-11 py-12">
         <div>
-          {contractor.bio && <p className="text-[15px] text-charcoal/70 leading-relaxed mb-8">{contractor.bio}</p>}
+          {contractor.bio && <p className="text-[15px] text-stone leading-relaxed mb-8">{contractor.bio}</p>}
 
-          <h2 className="font-display font-semibold text-xl mb-5">Completed Projects</h2>
+          <h2 className="font-display text-xl mb-5">Completed Projects</h2>
           {contractor.projects.length === 0 ? (
-            <p className="text-sm text-charcoal/50 border border-line rounded-md p-6 bg-white">
+            <p className="text-sm text-stone border border-line rounded-md p-6 bg-paper">
               No projects listed yet for this contractor.
             </p>
           ) : (
@@ -206,24 +197,24 @@ export default function ContractorProfilePage() {
               {contractor.projects.map((p) => (
                 <div
                   key={p.id}
-                  className="border border-line rounded-md overflow-hidden bg-white cursor-pointer hover:border-amber transition-colors"
+                  className="border border-line rounded-md overflow-hidden bg-paper cursor-pointer hover:border-ink transition-colors"
                   onClick={() => setOpenProject(p)}
                 >
                   <ProjectGallery imageUrls={p.imageUrls} />
                   <div className="p-4">
-                    <h3 className="font-display font-semibold text-[15px] mb-1">{p.title}</h3>
-                    {(p.developerName || p.projectType) && (
-                      <p className="text-xs text-charcoal/50 mb-3">
-                        {[p.developerName && `Developer: ${p.developerName}`, p.projectType].filter(Boolean).join(' · ')}
+                    <h3 className="font-display text-[15px] mb-1">{p.title}</h3>
+                    {(p.clientName || p.projectType) && (
+                      <p className="text-xs text-stone mb-3">
+                        {[p.clientName && `Client: ${p.clientName}`, p.projectType].filter(Boolean).join(' · ')}
                       </p>
                     )}
                     <div className="flex justify-between items-center pt-3 border-t border-line">
-                      {p.squareFeet && (
-                        <span className="font-mono font-semibold text-sm text-amber">
-                          {p.squareFeet.toLocaleString('en-IN')} sq ft
+                      {p.contractValueLakh && (
+                        <span className="font-medium text-sm text-ink">
+                          ₹{p.contractValueLakh >= 100 ? `${(p.contractValueLakh / 100).toFixed(1)} Cr` : `${p.contractValueLakh} L`} contract value
                         </span>
                       )}
-                      {p.completedYear && <span className="text-xs text-charcoal/50">{p.completedYear}</span>}
+                      {p.completedYear && <span className="text-xs text-stone">{p.completedYear}</span>}
                     </div>
                   </div>
                 </div>
@@ -233,56 +224,56 @@ export default function ContractorProfilePage() {
         </div>
 
         <div>
-          <div className="bg-white border border-line rounded-md p-6 mb-5">
-            <h4 className="font-display font-semibold text-[15.5px] mb-4">Business Details</h4>
+          <div className="bg-paper border border-line rounded-md p-6 mb-5">
+            <h4 className="font-display text-[15.5px] mb-4">Business Details</h4>
             <dl className="text-[13.5px]">
               <div className="flex justify-between py-2.5 border-b border-line">
-                <dt className="text-charcoal/50">License Number</dt>
-                <dd className="font-mono text-xs font-semibold">{contractor.licenseNumber}</dd>
+                <dt className="text-stone">License Number</dt>
+                <dd className="text-xs font-medium">{contractor.licenseNumber}</dd>
               </div>
               {(contractor.teamSizeMin || contractor.teamSizeMax) && (
                 <div className="flex justify-between py-2.5 border-b border-line">
-                  <dt className="text-charcoal/50">Team Size</dt>
-                  <dd className="font-semibold">{contractor.teamSizeMin}–{contractor.teamSizeMax} workers</dd>
+                  <dt className="text-stone">Team Size</dt>
+                  <dd className="font-medium">{contractor.teamSizeMin}–{contractor.teamSizeMax} workers</dd>
                 </div>
               )}
               <div className="flex justify-between py-2.5 border-b border-line">
-                <dt className="text-charcoal/50">GST Registered</dt>
-                <dd className="font-semibold">{contractor.gstRegistered ? 'Yes' : 'Not disclosed'}</dd>
+                <dt className="text-stone">GST Registered</dt>
+                <dd className="font-medium">{contractor.gstRegistered ? 'Yes' : 'Not disclosed'}</dd>
               </div>
               {contractor.insuranceCoverLakh && (
                 <div className="flex justify-between py-2.5">
-                  <dt className="text-charcoal/50">Insurance Cover</dt>
-                  <dd className="font-semibold">₹{contractor.insuranceCoverLakh} L</dd>
+                  <dt className="text-stone">Insurance Cover</dt>
+                  <dd className="font-medium">₹{contractor.insuranceCoverLakh} L</dd>
                 </div>
               )}
             </dl>
           </div>
 
-          <div className="bg-white border border-line rounded-md p-6 sticky top-24">
-            <h4 className="font-display font-semibold text-[15.5px] mb-4">Request a Quotation</h4>
+          <div className="bg-paper border border-line rounded-md p-6 sticky top-24">
+            <h4 className="font-display text-[15.5px] mb-4">Request a Quotation</h4>
 
             {status === 'loading' ? null : status !== 'authenticated' ? (
               <div>
-                <p className="text-sm text-charcoal/60 mb-4">Sign in to request a quote from this contractor.</p>
+                <p className="text-sm text-stone mb-4">Sign in to request a quote from this contractor.</p>
                 <Link
                   href="/signup"
-                  className="block text-center bg-amber text-white font-semibold text-sm py-3 rounded-[3px] hover:bg-[#be6520] transition-colors"
+                  className="block text-center bg-ink text-paper font-medium text-sm py-3 rounded-full hover:bg-stone transition-colors"
                 >
                   Sign up to continue
                 </Link>
               </div>
             ) : submitResult === 'success' ? (
               <div className="text-sm">
-                <p className="text-verified font-medium mb-1">Request sent.</p>
-                <p className="text-charcoal/60">
+                <p className="text-sage font-medium mb-1">Request sent.</p>
+                <p className="text-stone">
                   {contractor.name} will be notified and can reach out to discuss your project.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleQuoteSubmit} className="flex flex-col gap-3.5">
                 <div>
-                  <label className="block text-xs font-semibold text-charcoal/60 mb-1.5">Project type</label>
+                  <label className="block text-xs font-medium text-stone mb-1.5">Project type</label>
                   <select
                     value={projectType}
                     onChange={(e) => setProjectType(e.target.value)}
@@ -294,7 +285,7 @@ export default function ContractorProfilePage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-charcoal/60 mb-1.5">Location</label>
+                  <label className="block text-xs font-medium text-stone mb-1.5">Location</label>
                   <input
                     type="text"
                     required
@@ -305,7 +296,7 @@ export default function ContractorProfilePage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-charcoal/60 mb-1.5">Estimated budget</label>
+                  <label className="block text-xs font-medium text-stone mb-1.5">Estimated budget</label>
                   <select
                     value={budgetRangeLabel}
                     onChange={(e) => setBudgetRangeLabel(e.target.value)}
@@ -318,7 +309,7 @@ export default function ContractorProfilePage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-charcoal/60 mb-1.5">Project details</label>
+                  <label className="block text-xs font-medium text-stone mb-1.5">Project details</label>
                   <textarea
                     required
                     value={details}
@@ -329,7 +320,7 @@ export default function ContractorProfilePage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-charcoal/60 mb-1.5">Phone number</label>
+                  <label className="block text-xs font-medium text-stone mb-1.5">Phone number</label>
                   <input
                     type="tel"
                     required
@@ -347,11 +338,11 @@ export default function ContractorProfilePage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="mt-1 bg-amber text-white font-semibold text-sm py-3 rounded-[3px] hover:bg-[#be6520] transition-colors disabled:opacity-60"
+                  className="mt-1 bg-ink text-paper font-medium text-sm py-3 rounded-full hover:bg-stone transition-colors disabled:opacity-60"
                 >
                   {submitting ? 'Sending…' : 'Send Request'}
                 </button>
-                <p className="text-[11.5px] text-charcoal/50 leading-relaxed">
+                <p className="text-[11.5px] text-stone leading-relaxed">
                   {contractor.name} will be notified and can reach out directly to discuss.
                 </p>
               </form>

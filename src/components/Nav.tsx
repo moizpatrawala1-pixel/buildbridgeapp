@@ -1,14 +1,8 @@
 // src/components/Nav.tsx
 //
-// Shared nav across all pages. Session-aware: shows "Sign in / Get Started"
-// for anonymous visitors, or the developer's name + a sign-out link once
-// they're logged in. This is a client component (needs useSession) — pages
-// that render it can still be server components themselves.
-//
-// Logo: built as live text, not an image, so the weight contrast between
-// the thin parens and bold "kalm" (per the brand mark) stays crisp at any
-// size and is easy to re-tune later — see globals.css for the Outfit
-// weights this depends on (300 for the parens, 800 for the wordmark).
+// Redesigned around the (Kalm) logo: the parentheses ARE the mark now, no
+// separate icon badge. Quiet by design — off-white background, hairline
+// border instead of a solid dark bar, ink-colored text throughout.
 
 'use client';
 
@@ -19,42 +13,42 @@ export default function Nav() {
   const { data: session, status } = useSession();
 
   return (
-    <nav className="sticky top-0 z-50 bg-paper/95 backdrop-blur-sm border-b border-line">
-      <div className="max-w-[1440px] mx-auto px-8 h-[72px] flex items-center justify-between">
-        <Link href="/" className="font-display text-2xl tracking-tight text-charcoal flex items-baseline">
-          <span className="font-light">(kalm)</span>
+    <nav className="sticky top-0 z-50 bg-paper/90 backdrop-blur-sm border-b border-line">
+      <div className="max-w-[1180px] mx-auto px-8 h-[76px] flex items-center justify-between">
+        <Link href="/" className="font-display text-2xl text-ink tracking-tight">
+          (kalm)
         </Link>
 
         <div className="hidden md:flex items-center gap-10">
-          <Link href="/browse" className="text-sm font-medium text-charcoal/65 hover:text-charcoal transition-colors">
+          <Link href="/browse" className="text-sm text-stone hover:text-ink transition-colors">
             Browse Contractors
           </Link>
           {status === 'authenticated' && (
-            <Link href="/dashboard" className="text-sm font-medium text-charcoal/65 hover:text-charcoal transition-colors">
+            <Link href="/dashboard" className="text-sm text-stone hover:text-ink transition-colors">
               Dashboard
             </Link>
           )}
         </div>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-6">
           {status === 'loading' ? null : status === 'authenticated' ? (
             <>
-              <span className="text-sm font-medium text-charcoal/80">{session.user?.name}</span>
+              <span className="text-sm text-ink">{session.user?.name}</span>
               <button
                 onClick={() => signOut({ callbackUrl: '/' })}
-                className="text-sm font-medium text-charcoal/65 hover:text-charcoal transition-colors"
+                className="text-sm text-stone hover:text-ink transition-colors"
               >
                 Sign out
               </button>
             </>
           ) : (
             <>
-              <Link href="/login" className="text-sm font-medium text-charcoal/80 hover:text-charcoal transition-colors">
+              <Link href="/login" className="text-sm text-ink hover:text-stone transition-colors">
                 Sign in
               </Link>
               <Link
                 href="/signup"
-                className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3 rounded-[3px] bg-amber text-white hover:bg-amber-dark transition-colors"
+                className="inline-flex items-center justify-center text-sm px-5 py-2.5 rounded-full bg-ink text-paper hover:bg-stone transition-colors"
               >
                 Get Started
               </Link>

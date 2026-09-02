@@ -1,27 +1,16 @@
 // src/app/page.tsx — Landing page.
-//
-// Unlike the earlier static demo, this does NOT show invented platform
-// stats ("2,340+ contractors", "₹840Cr verified value") — those were
-// mockup numbers, and showing them on a real site would be showing real
-// visitors a lie about how many contractors are actually on the platform.
-// Once there's real contractor and quote-request data, a live stats section
-// can come back — pulling from an actual COUNT query, not hardcoded text.
-//
-// Trade category tiles link to /browse?trade=X, which the browse page reads
-// on load to pre-select that filter — so this section is a real shortcut
-// into the filter we built, not decorative text repeating it.
 
 import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 
 const TRADE_CATEGORIES = [
-  { name: 'RCC & Structural', icon: '🏗️' },
-  { name: 'Electrical', icon: '⚡' },
-  { name: 'Waterproofing', icon: '💧' },
-  { name: 'Interior Fit-out', icon: '🛋️' },
-  { name: 'Plumbing', icon: '🔧' },
-  { name: 'Facade & Cladding', icon: '🧱' },
+  'RCC & Structural',
+  'Electrical',
+  'Waterproofing',
+  'Interior Fit-out',
+  'Plumbing',
+  'Facade & Cladding',
 ];
 
 export default function Home() {
@@ -29,38 +18,28 @@ export default function Home() {
     <>
       <Nav />
 
-      <header className="bg-paper text-charcoal pt-22 pb-16 relative overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.05] pointer-events-none"
-          style={{
-            backgroundImage:
-              'linear-gradient(#1c1e22 1px, transparent 1px), linear-gradient(90deg, #1c1e22 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
-        />
-        <div className="max-w-[1440px] mx-auto px-8 relative z-10">
-          <div className="font-mono text-xs font-medium tracking-widest uppercase text-amber flex items-center gap-2.5 mb-5">
-            <span className="w-5 h-[1.5px] bg-amber" />
-            Licensed &amp; Verified Network
-          </div>
-          <p className="font-display text-xl md:text-2xl font-bold text-amber tracking-tight mb-4">Kaam. Connected.</p>
-          <h1 className="font-display font-bold text-[clamp(38px,4.6vw,60px)] leading-[1.05] tracking-tight mb-5 max-w-2xl">
-            Build with contractors who&apos;ve <span className="text-amber">proven</span> it before.
+      <header className="pt-28 pb-24 text-center">
+        <div className="max-w-[720px] mx-auto px-8">
+          <p className="font-display text-3xl md:text-4xl text-ink mb-8 leading-tight">
+            Kaam. Connected.
+          </p>
+          <h1 className="font-display font-light text-[clamp(34px,4.4vw,52px)] leading-[1.15] text-ink mb-7">
+            Build with contractors who&apos;ve proven it before.
           </h1>
-          <p className="text-[17px] leading-relaxed text-charcoal/65 max-w-[480px] mb-9">
+          <p className="text-[17px] leading-relaxed text-stone max-w-[480px] mx-auto mb-10">
             (kalm) connects developers with licensed contractors — every profile backed by
             verified project history, not just claims.
           </p>
-          <div className="flex gap-3.5 flex-wrap">
+          <div className="flex gap-4 flex-wrap justify-center">
             <Link
               href="/browse"
-              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] bg-amber text-white hover:bg-amber-dark transition-colors"
+              className="inline-flex items-center justify-center text-sm px-7 py-3.5 rounded-full bg-ink text-paper hover:bg-stone transition-colors"
             >
               Browse Contractors
             </Link>
             <Link
               href="/signup"
-              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] border-[1.5px] border-line text-charcoal hover:border-amber hover:text-amber transition-colors"
+              className="inline-flex items-center justify-center text-sm px-7 py-3.5 rounded-full border border-line text-ink hover:border-ink transition-colors"
             >
               Get Started
             </Link>
@@ -68,137 +47,86 @@ export default function Home() {
         </div>
       </header>
 
-      {/* HOW IT WORKS */}
-      <section className="py-20">
-        <div className="max-w-[1440px] mx-auto px-8">
-          <div className="text-center max-w-[620px] mx-auto mb-14">
-            <div className="font-mono text-xs font-medium tracking-widest uppercase text-amber flex items-center justify-center gap-2.5 mb-4">
-              <span className="w-5 h-[1.5px] bg-amber" />
-              How It Works
-              <span className="w-5 h-[1.5px] bg-amber" />
-            </div>
-            <h2 className="font-display font-bold text-[clamp(30px,3.6vw,42px)] leading-tight tracking-tight mb-4">
-              Browse, notify, negotiate.
-            </h2>
-            <p className="text-lg leading-relaxed text-charcoal/60">
-              No middleman on the deal. If a deal happens, it happens between you — same as it
-              always has, just with proof upfront.
-            </p>
-          </div>
+      <section className="py-24 border-t border-line">
+        <div className="max-w-[880px] mx-auto px-8">
+          <h2 className="font-display font-light text-[clamp(28px,3.2vw,38px)] text-center text-ink mb-16">
+            Browse, notify, negotiate.
+          </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
             {[
-              { n: '01', title: 'Browse verified profiles', body: 'Filter by location and trade, see real reviews and completed project history.' },
-              { n: '02', title: 'Select & request a quote', body: 'Create an account, shortlist contractors, and share your project details.' },
-              { n: '03', title: 'They get notified', body: 'Selected contractors receive an instant notification and reach out directly.' },
-              { n: '04', title: 'Negotiate & decide', body: 'You talk terms directly. If it\'s a match, great. If not, no obligation either way.' },
+              { title: 'Browse verified profiles', body: 'Filter by location and trade, see real reviews and completed project history.' },
+              { title: 'Request a quote', body: 'Create an account, shortlist contractors, and share your project details.' },
+              { title: 'They get notified', body: 'Selected contractors receive an instant notification and reach out directly.' },
+              { title: 'Negotiate & decide', body: 'You talk terms directly. No obligation either way.' },
             ].map((step) => (
-              <div key={step.n}>
-                <div className="w-[54px] h-[54px] rounded-full bg-paper-dim border-[1.5px] border-amber flex items-center justify-center font-mono font-semibold text-amber mb-5">
-                  {step.n}
-                </div>
-                <h4 className="font-display font-semibold text-base mb-2">{step.title}</h4>
-                <p className="text-sm text-charcoal/60 leading-relaxed">{step.body}</p>
+              <div key={step.title} className="text-center md:text-left">
+                <h4 className="font-display text-lg text-ink mb-2">{step.title}</h4>
+                <p className="text-sm text-stone leading-relaxed">{step.body}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* TRADE CATEGORIES — real links into the browse filter, not decoration */}
-      <section className="py-20 bg-paper-dim">
-        <div className="max-w-[1440px] mx-auto px-8">
-          <div className="text-center max-w-[620px] mx-auto mb-14">
-            <div className="font-mono text-xs font-medium tracking-widest uppercase text-amber flex items-center justify-center gap-2.5 mb-4">
-              <span className="w-5 h-[1.5px] bg-amber" />
-              What We Cover
-              <span className="w-5 h-[1.5px] bg-amber" />
-            </div>
-            <h2 className="font-display font-bold text-[clamp(30px,3.6vw,42px)] leading-tight tracking-tight mb-4">
-              Every trade, one directory.
-            </h2>
-          </div>
+      <section className="py-24 bg-paper-dim border-t border-line">
+        <div className="max-w-[880px] mx-auto px-8">
+          <h2 className="font-display font-light text-[clamp(28px,3.2vw,38px)] text-center text-ink mb-14">
+            Every trade, one directory.
+          </h2>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="flex flex-wrap justify-center gap-3">
             {TRADE_CATEGORIES.map((trade) => (
               <Link
-                key={trade.name}
-                href={`/browse?trade=${encodeURIComponent(trade.name)}`}
-                className="flex items-center gap-4 bg-white border border-line rounded-md p-5 hover:border-charcoal transition-colors"
+                key={trade}
+                href={`/browse?trade=${encodeURIComponent(trade)}`}
+                className="text-sm px-5 py-2.5 rounded-full border border-line bg-paper text-ink hover:border-ink transition-colors"
               >
-                <span className="text-2xl">{trade.icon}</span>
-                <span className="font-display font-semibold text-[15px]">{trade.name}</span>
+                {trade}
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* VERIFICATION STANDARD */}
-      <section className="py-20">
-        <div className="max-w-[1440px] mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
-          <div>
-            <div className="font-mono text-xs font-medium tracking-widest uppercase text-amber flex items-center gap-2.5 mb-4">
-              <span className="w-5 h-[1.5px] bg-amber" />
-              What &quot;Verified&quot; Actually Means
-            </div>
-            <h2 className="font-display font-bold text-[clamp(28px,3.2vw,36px)] leading-tight tracking-tight mb-5">
-              A badge that means something, not just a color.
-            </h2>
-            <p className="text-[15.5px] leading-relaxed text-charcoal/65 mb-4">
-              Every Verified contractor&apos;s license has been independently checked against the
-              issuing state authority — not just submitted and taken at their word.
-            </p>
-            <p className="text-[15.5px] leading-relaxed text-charcoal/65">
-              If we haven&apos;t been able to confirm a license yet, a contractor stays marked
-              Pending. We&apos;d rather show fewer Verified profiles than let the badge stop
-              meaning what it says.
-            </p>
-          </div>
-          <div className="bg-verified-soft border border-verified/20 rounded-lg p-8">
-            <div className="w-14 h-14 rounded-full border-2 border-verified flex items-center justify-center mb-5 bg-white">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#3D5A40" strokeWidth="3" className="w-6 h-6">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </div>
-            <h4 className="font-display font-semibold text-lg mb-2 text-verified">Verified means:</h4>
-            <ul className="flex flex-col gap-2.5 text-[14.5px] text-charcoal/70">
-              <li>✓ License number checked against the state registry</li>
-              <li>✓ Contact details confirmed directly with the contractor</li>
-              <li>✓ Never marked Verified from self-submitted documents alone</li>
-            </ul>
-          </div>
+      <section className="py-24 border-t border-line">
+        <div className="max-w-[640px] mx-auto px-8 text-center">
+          <h2 className="font-display font-light text-[clamp(28px,3.2vw,38px)] text-ink mb-6">
+            A badge that means something.
+          </h2>
+          <p className="text-[15.5px] leading-relaxed text-stone mb-4">
+            Every Verified contractor&apos;s license has been independently checked against the
+            issuing state authority — not just submitted and taken at their word.
+          </p>
+          <p className="text-[15.5px] leading-relaxed text-stone mb-10">
+            If we haven&apos;t confirmed a license yet, a contractor stays marked Pending. We&apos;d
+            rather show fewer Verified profiles than let the badge stop meaning what it says.
+          </p>
+          <span className="inline-flex items-center gap-2 text-sm text-ink border border-line rounded-full px-5 py-2.5">
+            ( verified — license checked independently )
+          </span>
         </div>
       </section>
 
-      {/* CLOSING CTA */}
-      <section className="py-24 bg-paper-dim text-charcoal text-center relative overflow-hidden border-t border-line">
-        <div
-          className="absolute inset-0 opacity-[0.05] pointer-events-none"
-          style={{
-            backgroundImage:
-              'linear-gradient(#1c1e22 1px, transparent 1px), linear-gradient(90deg, #1c1e22 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
-        />
-        <div className="max-w-[620px] mx-auto px-8 relative z-10">
-          <h2 className="font-display font-bold text-[clamp(32px,3.8vw,44px)] mb-4 leading-tight">
+      <section className="py-28 border-t border-line text-center">
+        <div className="max-w-[560px] mx-auto px-8">
+          <h2 className="font-display font-light text-[clamp(30px,3.6vw,42px)] text-ink mb-5 leading-tight">
             Your next contractor is one search away.
           </h2>
-          <p className="text-charcoal/60 text-[15.5px] mb-9">
+          <p className="text-stone text-[15.5px] mb-10">
             Browse licensed contractors with verified project history, or list your own business
             to get discovered.
           </p>
-          <div className="flex gap-3.5 flex-wrap justify-center">
+          <div className="flex gap-4 flex-wrap justify-center">
             <Link
               href="/browse"
-              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] bg-amber text-white hover:bg-amber-dark transition-colors"
+              className="inline-flex items-center justify-center text-sm px-7 py-3.5 rounded-full bg-ink text-paper hover:bg-stone transition-colors"
             >
               Browse Contractors
             </Link>
             <Link
               href="/admin"
-              className="inline-flex items-center justify-center font-semibold text-sm px-6 py-3.5 rounded-[3px] border-[1.5px] border-line text-charcoal hover:border-amber hover:text-amber transition-colors"
+              className="inline-flex items-center justify-center text-sm px-7 py-3.5 rounded-full border border-line text-ink hover:border-ink transition-colors"
             >
               List Your Business
             </Link>

@@ -4,33 +4,31 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-paper-dim text-charcoal/60 pt-16 pb-8 mt-auto border-t border-line">
-      <div className="max-w-[1440px] mx-auto px-8">
+    <footer className="bg-paper-dim text-stone pt-16 pb-8 mt-auto border-t border-line">
+      <div className="max-w-[1180px] mx-auto px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 pb-12 border-b border-line">
           <div>
-            <div className="font-display text-xl text-charcoal mb-3.5 flex items-baseline">
-              <span className="font-light">(kalm)</span>
-            </div>
+            <div className="font-display text-xl text-ink mb-3.5">(kalm)</div>
             <p className="text-sm leading-relaxed max-w-[260px]">
               Connecting developers, licensed contractors, and material suppliers on one verified network.
             </p>
           </div>
           <div>
-            <h4 className="font-mono text-xs tracking-wider uppercase text-charcoal/40 mb-4">Platform</h4>
+            <h4 className="text-xs text-stone mb-4">Platform</h4>
             <ul className="flex flex-col gap-3">
-              <li><Link href="/browse" className="text-sm hover:text-charcoal transition-colors">Browse Contractors</Link></li>
-              <li><Link href="/dashboard" className="text-sm hover:text-charcoal transition-colors">Post a Project</Link></li>
+              <li><Link href="/browse" className="text-sm hover:text-ink transition-colors">Browse Contractors</Link></li>
+              <li><Link href="/dashboard" className="text-sm hover:text-ink transition-colors">Post a Project</Link></li>
             </ul>
           </div>
           <div>
-            <h4 className="font-mono text-xs tracking-wider uppercase text-charcoal/40 mb-4">For Business</h4>
+            <h4 className="text-xs text-stone mb-4">For Business</h4>
             <ul className="flex flex-col gap-3">
-              <li><Link href="/signup" className="text-sm hover:text-charcoal transition-colors">Register as Developer</Link></li>
-              <li><Link href="/admin" className="text-sm hover:text-charcoal transition-colors">Admin</Link></li>
+              <li><Link href="/signup" className="text-sm hover:text-ink transition-colors">Register as Developer</Link></li>
+              <li><Link href="/admin" className="text-sm hover:text-ink transition-colors">Admin</Link></li>
             </ul>
           </div>
           <div>
-            <h4 className="font-mono text-xs tracking-wider uppercase text-charcoal/40 mb-4">Company</h4>
+            <h4 className="text-xs text-stone mb-4">Company</h4>
             <ul className="flex flex-col gap-3">
               <li><span className="text-sm">About</span></li>
               <li><span className="text-sm">Contact</span></li>
