@@ -90,3 +90,71 @@ function escapeHtml(str: string): string {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
+
+// Both functions below send TO the developer's own email address, unlike
+// sendQuoteRequestEmail above which always sends to one fixed internal
+// inbox. On Resend's free test domain, sends to any address other than the
+// account's own registered email are silently rejected — this only
+// actually delivers once a real domain is verified in Resend. See the
+// deployment notes; this is a hard prerequisite before either of these
+// emails will reach real users, not just a nice-to-have.
+
+export async function sendVerificationEmail(input: {
+  toEmail: string;
+  toName: string;
+  verifyUrl: string;
+}): Promise<boolean> {
+  try {
+    const { error } = await getResendClient().emails.send({
+      from: '(kalm) <onboarding@resend.dev>',
+      to: input.toEmail,
+      subject: 'Verify your (kalm) email',
+      html: `
+        <div style="font-family: sans-serif; max-width: 480px;">
+          <h2>Confirm your email</h2>
+          <p>Hi ${escapeHtml(input.toName)}, click below to verify your email for (kalm):</p>
+          <p><a href="${input.verifyUrl}" style="display:inline-block;background:#1c1e22;color:#fff;padding:10px 20px;border-radius:4px;text-decoration:none;">Verify email</a></p>
+          <p style="color:#666;font-size:13px;">This link expires in 24 hours. If you didn't sign up for (kalm), you can ignore this email.</p>
+        </div>
+      `,
+    });
+    if (error) {
+      console.error('Resend error sending verification email:', error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('Failed to send verification email:', err);
+    return false;
+  }
+}
+
+export async function sendPasswordResetEmail(input: {
+  toEmail: string;
+  toName: string;
+  resetUrl: string;
+}): Promise<boolean> {
+  try {
+    const { error } = await getResendClient().emails.send({
+      from: '(kalm) <onboarding@resend.dev>',
+      to: input.toEmail,
+      subject: 'Reset your (kalm) password',
+      html: `
+        <div style="font-family: sans-serif; max-width: 480px;">
+          <h2>Reset your password</h2>
+          <p>Hi ${escapeHtml(input.toName)}, click below to set a new password:</p>
+          <p><a href="${input.resetUrl}" style="display:inline-block;background:#1c1e22;color:#fff;padding:10px 20px;border-radius:4px;text-decoration:none;">Reset password</a></p>
+          <p style="color:#666;font-size:13px;">This link expires in 1 hour. If you didn't request this, you can ignore this email — your password won't change.</p>
+        </div>
+      `,
+    });
+    if (error) {
+      console.error('Resend error sending password reset email:', error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('Failed to send password reset email:', err);
+    return false;
+  }
+}

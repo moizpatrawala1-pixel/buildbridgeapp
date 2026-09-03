@@ -8,8 +8,10 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
+import { sendVerificationEmail } from '@/lib/email';
 
 const signupSchema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(200),
@@ -50,6 +52,8 @@ export async function POST(req: NextRequest) {
   }
 
   const passwordHash = await bcrypt.hash(password, 12);
+  const emailVerifyToken = crypto.randomBytes(32).toString('hex');
+  const emailVerifyTokenExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
 
   const developer = await prisma.developer.create({
     data: {
@@ -57,7 +61,19 @@ export async function POST(req: NextRequest) {
       email: normalizedEmail,
       passwordHash,
       phone,
+      emailVerifyToken,
+      emailVerifyTokenExpiresAt,
     },
+  });
+
+  // Signup succeeds regardless of whether this send works — a Resend
+  // outage or misconfiguration shouldn't block account creation. Failures
+  // are logged inside sendVerificationEmail itself.
+  const baseUrl = process.env.NEXTAUTH_URL ?? '';
+  await sendVerificationEmail({
+    toEmail: developer.email,
+    toName: developer.name,
+    verifyUrl: `${baseUrl}/verify-email?token=${emailVerifyToken}`,
   });
 
   return NextResponse.json({ id: developer.id, name: developer.name, email: developer.email });

@@ -24,7 +24,6 @@ export default function Footer() {
             <h4 className="text-xs text-stone mb-4">For Business</h4>
             <ul className="flex flex-col gap-3">
               <li><Link href="/signup" className="text-sm hover:text-ink transition-colors">Register as Developer</Link></li>
-              <li><Link href="/admin" className="text-sm hover:text-ink transition-colors">Admin</Link></li>
             </ul>
           </div>
           <div>

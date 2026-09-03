@@ -152,6 +152,20 @@ model Developer {
 
   phone String? // required at signup going forward; stays nullable so accounts created before this change don't break
 
+  // Email verification — set on signup, cleared once the link is clicked.
+  // Login is NOT blocked on this being true (see verify-email route
+  // comment for why); it's tracked so a fake/mistyped email is visible in
+  // admin, not to gate access.
+  emailVerified              Boolean   @default(false)
+  emailVerifyToken           String?   @unique
+  emailVerifyTokenExpiresAt  DateTime?
+
+  // Password reset — same one-time-token pattern as email verification,
+  // kept as separate fields (not reused) so a live password-reset link
+  // can't also be replayed to verify an email, or vice versa.
+  passwordResetToken          String?   @unique
+  passwordResetTokenExpiresAt DateTime?
+
   quoteRequests QuoteRequest[]
 
   createdAt DateTime @default(now())
