@@ -30,7 +30,7 @@ export default function Footer() {
             <h4 className="text-xs text-stone mb-4">Company</h4>
             <ul className="flex flex-col gap-3">
               <li><Link href="/about" className="text-sm hover:text-ink transition-colors">About</Link></li>
-              <li><span className="text-sm">Contact</span></li>
+              <li><Link href="/contact" className="text-sm hover:text-ink transition-colors">Contact</Link></li>
             </ul>
           </div>
         </div>

@@ -158,3 +158,44 @@ export async function sendPasswordResetEmail(input: {
     return false;
   }
 }
+
+// Sends a contact-form submission to the fixed internal inbox
+// (QUOTE_NOTIFICATION_EMAIL — same address used for quote-request
+// notifications, since it's the one inbox actually monitored right now).
+// replyTo is set to the sender's own email so replying in your inbox goes
+// straight back to them, not to onboarding@resend.dev.
+export async function sendContactFormEmail(input: {
+  name: string;
+  email: string;
+  message: string;
+}): Promise<boolean> {
+  const notifyAddress = process.env.QUOTE_NOTIFICATION_EMAIL;
+  if (!notifyAddress) {
+    console.error('QUOTE_NOTIFICATION_EMAIL is not set — cannot send contact form email');
+    return false;
+  }
+
+  try {
+    const { error } = await getResendClient().emails.send({
+      from: '(kalm) <onboarding@resend.dev>',
+      to: notifyAddress,
+      replyTo: input.email,
+      subject: `New contact form message from ${escapeHtml(input.name)}`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 560px;">
+          <h2>New contact form message</h2>
+          <p><strong>From:</strong> ${escapeHtml(input.name)} (${escapeHtml(input.email)})</p>
+          <p style="white-space: pre-wrap;">${escapeHtml(input.message)}</p>
+        </div>
+      `,
+    });
+    if (error) {
+      console.error('Resend error sending contact form email:', error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('Failed to send contact form email:', err);
+    return false;
+  }
+}
