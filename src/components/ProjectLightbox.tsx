@@ -1,12 +1,17 @@
 // src/components/ProjectLightbox.tsx
 //
-// Full-screen overlay for browsing one project's photos at full size, with
-// the project's details (title, developer, type, size, year) shown
-// alongside. Opened by clicking a project card on the contractor profile
-// page — see that page's `openProject` state.
+// Modal for browsing one project's photos at a larger size, with the
+// project's details shown in a dedicated panel alongside — not a
+// full-bleed fullscreen photo viewer. Image sits in a contained dark panel
+// on the left; details (title, developer, type, size, floors, durations)
+// sit in a light panel on the right, so the two aren't fighting for the
+// same visual space the way a caption-over-photo layout does.
+//
+// Opened by clicking a project card on the contractor profile page — see
+// that page's `openProject` state.
 //
 // Keyboard: Escape closes, ←/→ navigate between photos. Click the
-// backdrop (outside the image/panel) to close, same as most lightboxes.
+// backdrop (outside the modal card) to close, same as most lightboxes.
 
 'use client';
 
@@ -35,9 +40,6 @@ export default function ProjectLightbox({ project, onClose }: ProjectLightboxPro
     setIndex((newIndex + project.imageUrls.length) % project.imageUrls.length);
   }
 
-  // Keyboard navigation — Escape to close, arrow keys to browse. Attached
-  // for the lifetime of the lightbox only, cleaned up on close/unmount so
-  // it doesn't leak a listener onto the rest of the page.
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose();
@@ -48,7 +50,6 @@ export default function ProjectLightbox({ project, onClose }: ProjectLightboxPro
     return () => window.removeEventListener('keydown', handleKey);
   }, [index, onClose]);
 
-  // Lock background scroll while the lightbox is open, restore on close.
   useEffect(() => {
     const original = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -57,9 +58,16 @@ export default function ProjectLightbox({ project, onClose }: ProjectLightboxPro
     };
   }, []);
 
+  const durationText = [
+    project.committedDurationMonths && `Committed: ${project.committedDurationMonths} mo`,
+    project.actualDurationMonths && `Actual: ${project.actualDurationMonths} mo`,
+  ]
+    .filter(Boolean)
+    .join(' · ');
+
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/90 flex flex-col"
+      className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4 md:p-10"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -68,103 +76,105 @@ export default function ProjectLightbox({ project, onClose }: ProjectLightboxPro
       <button
         onClick={onClose}
         aria-label="Close"
-        className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white text-lg flex items-center justify-center transition-colors"
+        className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white text-lg flex items-center justify-center transition-colors"
       >
         ×
       </button>
 
-      {/* Image area — stopPropagation so clicking the photo itself doesn't close the lightbox, only the backdrop does */}
       <div
-        className="flex-1 flex items-center justify-center relative px-4 md:px-16 py-6"
+        className="bg-paper rounded-lg overflow-hidden shadow-2xl w-full max-w-[1100px] max-h-[85vh] flex flex-col md:flex-row"
         onClick={(e) => e.stopPropagation()}
       >
-        {project.imageUrls.length > 0 ? (
-          // eslint-disable-next-line @next/next/no-img-element -- external Blob URL, full-size lightbox view
-          <img
-            src={project.imageUrls[index]}
-            alt={`${project.title} photo ${index + 1}`}
-            className="max-h-full max-w-full object-contain"
-          />
-        ) : (
-          <div className="w-full max-w-md h-64 bg-gradient-to-br from-[#4A4E55] to-[#2A2D32] rounded-md" />
-        )}
+        {/* Image panel — contained, not full-bleed */}
+        <div className="relative bg-ink md:w-[62%] shrink-0 flex items-center justify-center min-h-[280px] md:min-h-0">
+          {project.imageUrls.length > 0 ? (
+            // eslint-disable-next-line @next/next/no-img-element -- external Blob URL
+            <img
+              src={project.imageUrls[index]}
+              alt={`${project.title} photo ${index + 1}`}
+              className="max-h-[50vh] md:max-h-[85vh] w-full h-full object-contain"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-[#4A4E55] to-[#2A2D32]" />
+          )}
 
-        {hasMultiple && (
-          <>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                goTo(index - 1);
-              }}
-              aria-label="Previous photo"
-              className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl flex items-center justify-center transition-colors"
-            >
-              ‹
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                goTo(index + 1);
-              }}
-              aria-label="Next photo"
-              className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl flex items-center justify-center transition-colors"
-            >
-              ›
-            </button>
-          </>
-        )}
-      </div>
-
-      {/* Details + dot navigation, stopPropagation for the same reason as the image area */}
-      <div
-        className="bg-black/40 px-6 py-4 text-center"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {hasMultiple && (
-          <div className="flex justify-center gap-1.5 mb-3">
-            {project.imageUrls.map((_, i) => (
+          {hasMultiple && (
+            <>
               <button
-                key={i}
-                onClick={() => goTo(i)}
-                aria-label={`Go to photo ${i + 1}`}
-                className={`w-2 h-2 rounded-full transition-colors ${i === index ? 'bg-white' : 'bg-white/30 hover:bg-white/50'}`}
-              />
-            ))}
-          </div>
-        )}
-
-        <h2 className="font-display font-semibold text-white text-lg">{project.title}</h2>
-        {(project.developerName || project.projectType) && (
-          <p className="text-white/60 text-sm mt-0.5">
-            {[project.developerName && `Developer: ${project.developerName}`, project.projectType]
-              .filter(Boolean)
-              .join(' · ')}
-          </p>
-        )}
-        <div className="flex justify-center gap-4 mt-2 text-sm">
-          {project.squareFeet && (
-            <span className="font-mono font-semibold text-amber">
-              {project.squareFeet.toLocaleString('en-IN')} sq ft
-            </span>
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goTo(index - 1);
+                }}
+                aria-label="Previous photo"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white text-lg flex items-center justify-center transition-colors"
+              >
+                ‹
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goTo(index + 1);
+                }}
+                aria-label="Next photo"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white text-lg flex items-center justify-center transition-colors"
+              >
+                ›
+              </button>
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+                {project.imageUrls.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goTo(i);
+                    }}
+                    aria-label={`Go to photo ${i + 1}`}
+                    className={`w-1.5 h-1.5 rounded-full transition-colors ${i === index ? 'bg-white' : 'bg-white/35 hover:bg-white/60'}`}
+                  />
+                ))}
+              </div>
+              <span className="absolute top-4 right-4 bg-black/50 text-white text-[11px] font-mono px-2 py-1 rounded-full">
+                {index + 1} / {project.imageUrls.length}
+              </span>
+            </>
           )}
-          {project.elevationFloors && (
-            <span className="text-white/50">G+{project.elevationFloors}</span>
-          )}
-          {project.completedYear && <span className="text-white/50">{project.completedYear}</span>}
         </div>
-        {(project.committedDurationMonths || project.actualDurationMonths) && (
-          <p className="text-white/50 text-xs mt-2">
-            {project.committedDurationMonths && `Committed: ${project.committedDurationMonths} mo`}
-            {project.committedDurationMonths && project.actualDurationMonths && ' · '}
-            {project.actualDurationMonths && `Actual: ${project.actualDurationMonths} mo`}
-          </p>
-        )}
-        {hasMultiple && (
-          <p className="text-white/40 text-xs mt-2 font-mono">
-            {index + 1} / {project.imageUrls.length}
-          </p>
-        )}
+
+        {/* Details panel */}
+        <div className="p-8 md:p-9 flex flex-col justify-center overflow-y-auto md:w-[38%]">
+          <h2 className="font-display text-2xl text-ink mb-2">{project.title}</h2>
+
+          {(project.developerName || project.projectType) && (
+            <p className="text-stone text-sm mb-5">
+              {[project.developerName && `Developer: ${project.developerName}`, project.projectType]
+                .filter(Boolean)
+                .join(' · ')}
+            </p>
+          )}
+
+          <div className="flex flex-col gap-3.5 pt-5 border-t border-line">
+            {project.squareFeet && (
+              <DetailRow label="Built-up area" value={`${project.squareFeet.toLocaleString('en-IN')} sq ft`} />
+            )}
+            {project.elevationFloors && (
+              <DetailRow label="Elevation" value={`G+${project.elevationFloors}`} />
+            )}
+            {project.completedYear && (
+              <DetailRow label="Completed" value={String(project.completedYear)} />
+            )}
+            {durationText && <DetailRow label="Timeline" value={durationText} />}
+          </div>
+        </div>
       </div>
+    </div>
+  );
+}
+
+function DetailRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-baseline justify-between gap-4">
+      <span className="text-xs text-stone uppercase tracking-wide">{label}</span>
+      <span className="text-sm font-medium text-ink text-right">{value}</span>
     </div>
   );
 }
