@@ -26,7 +26,7 @@ type ContractorRow = {
 
 const statusStyle: Record<ContractorRow['verificationStatus'], string> = {
   VERIFIED: 'bg-verified-soft text-verified',
-  PENDING: 'bg-amber/10 text-amber',
+  PENDING: 'bg-sage-soft text-sage',
   REJECTED: 'bg-red-50 text-red-600',
 };
 
@@ -116,15 +116,15 @@ export default function AdminContractorsPage() {
         <div className="flex items-center justify-between mb-1">
           <h1 className="font-display font-bold text-2xl tracking-tight">Contractors</h1>
           <div className="flex gap-3">
-            <Link href="/admin/contractors/new" className="text-sm font-medium text-amber">
+            <Link href="/admin/contractors/new" className="text-sm font-medium text-sage">
               + Add contractor
             </Link>
-            <Link href="/browse" className="text-sm text-charcoal/50 hover:text-amber">
+            <Link href="/browse" className="text-sm text-stone hover:text-ink">
               View live site →
             </Link>
           </div>
         </div>
-        <p className="text-charcoal/60 text-sm mb-8">
+        <p className="text-stone text-sm mb-8">
           {contractors ? `${contractors.length} contractor${contractors.length === 1 ? '' : 's'} total` : 'Loading…'}
         </p>
 
@@ -136,8 +136,8 @@ export default function AdminContractorsPage() {
 
         {!error && contractors && contractors.length === 0 && (
           <div className="border border-line rounded-md p-10 text-center bg-white">
-            <p className="text-charcoal/70 font-medium mb-1">No contractors yet</p>
-            <Link href="/admin/contractors/new" className="text-sm text-amber font-medium">
+            <p className="text-stone font-medium mb-1">No contractors yet</p>
+            <Link href="/admin/contractors/new" className="text-sm text-sage font-medium">
               Add your first one →
             </Link>
           </div>
@@ -147,7 +147,7 @@ export default function AdminContractorsPage() {
           <div className="bg-white border border-line rounded-md overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left font-mono text-[11px] tracking-wider uppercase text-charcoal/50">
+                <tr className="text-left font-mono text-[11px] tracking-wider uppercase text-stone">
                   <th className="px-4 py-3 border-b border-line">Name</th>
                   <th className="px-4 py-3 border-b border-line">Location</th>
                   <th className="px-4 py-3 border-b border-line">Status</th>
@@ -161,9 +161,9 @@ export default function AdminContractorsPage() {
                   <tr key={c.id} className="border-b border-line last:border-b-0">
                     <td className="px-4 py-4">
                       <div className="font-medium">{c.name}</div>
-                      <div className="text-xs text-charcoal/50 font-mono">{c.licenseNumber}</div>
+                      <div className="text-xs text-stone font-mono">{c.licenseNumber}</div>
                     </td>
-                    <td className="px-4 py-4 text-charcoal/70">{c.area}, {c.city}</td>
+                    <td className="px-4 py-4 text-stone">{c.area}, {c.city}</td>
                     <td className="px-4 py-4">
                       <select
                         value={c.verificationStatus}
@@ -177,8 +177,8 @@ export default function AdminContractorsPage() {
                         <option value="REJECTED">REJECTED</option>
                       </select>
                     </td>
-                    <td className="px-4 py-4 text-charcoal/70">{c._count.projects}</td>
-                    <td className="px-4 py-4 text-charcoal/70">{c._count.quoteRequests}</td>
+                    <td className="px-4 py-4 text-stone">{c._count.projects}</td>
+                    <td className="px-4 py-4 text-stone">{c._count.quoteRequests}</td>
                     <td className="px-4 py-4 text-right">
                       <button
                         onClick={() => handleDelete(c)}

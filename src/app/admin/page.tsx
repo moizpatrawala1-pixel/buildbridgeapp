@@ -21,7 +21,7 @@ export default async function AdminPage() {
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h1 className="font-display font-bold text-2xl tracking-tight">Admin</h1>
-          <Link href="/browse" className="text-sm text-charcoal/50 hover:text-amber">
+          <Link href="/browse" className="text-sm text-stone hover:text-ink">
             View live site →
           </Link>
         </div>
@@ -29,28 +29,28 @@ export default async function AdminPage() {
         <div className="grid gap-4">
           <Link
             href="/admin/contractors/new"
-            className="block bg-white border border-line rounded-md p-6 hover:border-amber transition-colors"
+            className="block bg-white border border-line rounded-md p-6 hover:border-ink transition-colors"
           >
             <h2 className="font-display font-semibold text-lg mb-1">New Contractor</h2>
-            <p className="text-charcoal/60 text-sm">Add a contractor to the directory by hand.</p>
+            <p className="text-stone text-sm">Add a contractor to the directory by hand.</p>
           </Link>
 
           <Link
             href="/admin/contractors"
-            className="block bg-white border border-line rounded-md p-6 hover:border-amber transition-colors"
+            className="block bg-white border border-line rounded-md p-6 hover:border-ink transition-colors"
           >
             <h2 className="font-display font-semibold text-lg mb-1">Manage Existing</h2>
-            <p className="text-charcoal/60 text-sm">
+            <p className="text-stone text-sm">
               View all contractors, update verification status, or delete one.
             </p>
           </Link>
 
           <Link
             href="/admin/developers"
-            className="block bg-white border border-line rounded-md p-6 hover:border-amber transition-colors"
+            className="block bg-white border border-line rounded-md p-6 hover:border-ink transition-colors"
           >
             <h2 className="font-display font-semibold text-lg mb-1">Current Users</h2>
-            <p className="text-charcoal/60 text-sm">See everyone who has signed up on the site.</p>
+            <p className="text-stone text-sm">See everyone who has signed up on the site.</p>
           </Link>
         </div>
       </div>

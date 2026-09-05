@@ -66,7 +66,7 @@ export default function AboutPage() {
                   {initials(f.name)}
                 </div>
                 <h3 className="font-display text-lg text-ink mb-1 text-center">{f.name}</h3>
-                <p className="text-xs text-amber font-medium mb-4 tracking-wide uppercase text-center">{f.role}</p>
+                <p className="text-xs text-sage font-medium mb-4 tracking-wide uppercase text-center">{f.role}</p>
                 <p className="text-sm text-stone leading-relaxed text-left">{f.bio}</p>
               </div>
             ))}

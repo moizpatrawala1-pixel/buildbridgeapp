@@ -43,11 +43,11 @@ export default function AdminDevelopersPage() {
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-1">
           <h1 className="font-display font-bold text-2xl tracking-tight">Users</h1>
-          <Link href="/admin" className="text-sm text-charcoal/50 hover:text-amber">
+          <Link href="/admin" className="text-sm text-stone hover:text-ink">
             ← Back to admin
           </Link>
         </div>
-        <p className="text-charcoal/60 text-sm mb-8">
+        <p className="text-stone text-sm mb-8">
           {developers ? `${developers.length} user${developers.length === 1 ? '' : 's'} total` : 'Loading…'}
         </p>
 
@@ -59,7 +59,7 @@ export default function AdminDevelopersPage() {
 
         {!error && developers && developers.length === 0 && (
           <div className="border border-line rounded-md p-10 text-center bg-white">
-            <p className="text-charcoal/70 font-medium">No users yet</p>
+            <p className="text-stone font-medium">No users yet</p>
           </div>
         )}
 
@@ -67,7 +67,7 @@ export default function AdminDevelopersPage() {
           <div className="bg-white border border-line rounded-md overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left font-mono text-[11px] tracking-wider uppercase text-charcoal/50">
+                <tr className="text-left font-mono text-[11px] tracking-wider uppercase text-stone">
                   <th className="px-4 py-3 border-b border-line">Name</th>
                   <th className="px-4 py-3 border-b border-line">Email</th>
                   <th className="px-4 py-3 border-b border-line">Phone</th>
@@ -79,16 +79,16 @@ export default function AdminDevelopersPage() {
                 {developers.map((d) => (
                   <tr key={d.id} className="border-b border-line last:border-b-0">
                     <td className="px-4 py-4 font-medium">{d.name}</td>
-                    <td className="px-4 py-4 text-charcoal/70">{d.email}</td>
-                    <td className="px-4 py-4 text-charcoal/70">{d.phone ?? '—'}</td>
-                    <td className="px-4 py-4 text-charcoal/70">
+                    <td className="px-4 py-4 text-stone">{d.email}</td>
+                    <td className="px-4 py-4 text-stone">{d.phone ?? '—'}</td>
+                    <td className="px-4 py-4 text-stone">
                       {new Date(d.createdAt).toLocaleDateString('en-IN', {
                         year: 'numeric',
                         month: 'short',
                         day: 'numeric',
                       })}
                     </td>
-                    <td className="px-4 py-4 text-charcoal/70">{d._count.quoteRequests}</td>
+                    <td className="px-4 py-4 text-stone">{d._count.quoteRequests}</td>
                   </tr>
                 ))}
               </tbody>

@@ -68,7 +68,7 @@ export default function ImageUpload({ label, value, onChange, onUploadStateChang
 
   return (
     <div>
-      <label className="block text-xs font-semibold text-charcoal/60 mb-1.5">{label}</label>
+      <label className="block text-xs font-semibold text-stone mb-1.5">{label}</label>
 
       {value ? (
         <div className="flex items-center gap-3">
@@ -89,9 +89,9 @@ export default function ImageUpload({ label, value, onChange, onUploadStateChang
             accept="image/jpeg,image/png,image/webp"
             onChange={handleFileSelect}
             disabled={uploading}
-            className="text-[13px] w-full text-charcoal/70 file:mr-3 file:py-2 file:px-3 file:rounded-[4px] file:border file:border-line file:bg-paper file:text-[13px] file:font-medium disabled:opacity-50"
+            className="text-[13px] w-full text-stone file:mr-3 file:py-2 file:px-3 file:rounded-[4px] file:border file:border-line file:bg-paper file:text-[13px] file:font-medium disabled:opacity-50"
           />
-          {uploading && <p className="text-xs text-charcoal/50 mt-1">Uploading…</p>}
+          {uploading && <p className="text-xs text-stone mt-1">Uploading…</p>}
           {error && <p className="text-xs text-red-600 mt-1">{error}</p>}
         </div>
       )}
