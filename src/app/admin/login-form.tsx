@@ -39,10 +39,10 @@ export default function AdminLoginForm() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-charcoal px-6">
+    <main className="min-h-screen flex items-center justify-center bg-ink px-6">
       <form onSubmit={handleSubmit} className="w-full max-w-sm bg-paper rounded-md p-8">
         <h1 className="font-display font-bold text-2xl tracking-tight mb-1">Admin</h1>
-        <p className="text-charcoal/60 text-sm mb-6">Enter the admin password to continue.</p>
+        <p className="text-stone text-sm mb-6">Enter the admin password to continue.</p>
 
         <input
           type="password"
@@ -50,7 +50,7 @@ export default function AdminLoginForm() {
           autoFocus
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-3.5 py-2.5 border border-line rounded-[4px] text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber mb-3"
+          className="w-full px-3.5 py-2.5 border border-line rounded-[4px] text-sm bg-white focus:outline-none focus:ring-2 focus:ring-ink mb-3"
         />
 
         {error && <p className="text-sm text-red-600 mb-3">{error}</p>}
@@ -58,7 +58,7 @@ export default function AdminLoginForm() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full bg-charcoal text-paper font-semibold text-sm py-3 rounded-[3px] hover:bg-black transition-colors disabled:opacity-60"
+          className="w-full bg-ink text-paper font-semibold text-sm py-3 rounded-[3px] hover:bg-black transition-colors disabled:opacity-60"
         >
           {submitting ? 'Checking…' : 'Continue'}
         </button>
